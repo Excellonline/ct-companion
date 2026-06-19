@@ -61,7 +61,7 @@ deploy/         Public update manifest metadata
 
 ## Prerequisites
 
-- Flutter stable with Dart 3.10.3 or newer
+- Flutter 3.41.9 stable for matching CI formatting
 - Firebase CLI
 - FlutterFire CLI
 - Node.js and npm, used by Firebase CLI setup
