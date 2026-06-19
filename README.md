@@ -1,41 +1,90 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-wordmark-light.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/brand/logo-wordmark-dark.png">
+    <img alt="CardTrove Companion" src="assets/brand/logo-wordmark-dark.png" width="420">
+  </picture>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Excellonline/ct-companion/actions/workflows/flutter-ci.yml">
+    <img alt="Flutter CI" src="https://github.com/Excellonline/ct-companion/actions/workflows/flutter-ci.yml/badge.svg">
+  </a>
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-stable-02569B?logo=flutter&logoColor=white">
+  <img alt="Firebase" src="https://img.shields.io/badge/Firebase-Auth%20%7C%20Firestore%20%7C%20Storage-FFCA28?logo=firebase&logoColor=111111">
+  <img alt="Platforms" src="https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Windows-2D862F">
+</p>
+
 # CardTrove Companion
 
-Shared CardTrove team companion app for Android, iOS, and Windows desktop.
+CardTrove Companion is a shared team workspace app for notes, checklists, reminders, files, chat, decisions, and pipeline work. It is built with Flutter and Firebase so the team can capture work from mobile, review it on desktop, and keep one synced operational record.
 
-- Mobile: enter notes, checklists, reminders, and shared to-dos on the go.
-- Desktop: review notes and manage the shared pipeline board.
-- Team workspace: every signed-in user shares one pool of notes, to-dos, chat topics, and pipeline cards.
-- Chat: persistent topic list with sender names, timestamps, and Firebase Storage attachments.
-- Files: shared docs, references, exports, and team handoffs with admin-only delete.
-- Idea inbox: capture rough ideas before promoting them to the pipeline.
-- Decisions: record important calls with context so the team has a durable log.
-- Activity and notifications: see workspace changes and @mention teammates from chat, comments, and decisions.
-- Backup export: admins can generate/copy a JSON workspace backup from Settings.
-- Admin controls: admins manage roles and protected destructive actions.
+## Highlights
 
-## Stack
+| Area | What it supports |
+| --- | --- |
+| Notes | Rich team notes with folders, owners, due dates, archive state, image markup, comments, and search |
+| Pipeline | Shared board views for active work, ownership, status, priority, and due dates |
+| To-Do | Lightweight team checklist items with realtime sync |
+| Chat | Persistent topics, sender metadata, timestamps, and Firebase Storage attachments |
+| Files | Shared references, exports, and handoffs with admin-only delete controls |
+| Decisions | Durable decision records with context and audit metadata |
+| Activity | Workspace activity feed and notifications, including @mention handling |
+| Admin | Role management, protected destructive actions, archive restore, and JSON backup export |
 
-- Flutter + Material 3
-- Firebase Auth email/password
-- Firestore realtime sync/offline cache
-- Firebase Storage for chat attachments
-- Firebase Storage for shared team files
+## Tech Stack
+
+- Flutter stable + Material 3
 - Riverpod for app state
-- Android, iOS scaffold, and Windows desktop platform folders
+- Firebase Auth with email/password sign-in
+- Cloud Firestore for realtime data and offline cache
+- Firebase Storage for note images, chat attachments, and shared files
+- Local notifications for reminders
+- Android, iOS, macOS, and Windows project scaffolds
 
-## Firebase Setup
+## Repository Layout
 
-1. Create a Firebase project.
-2. Enable Firestore Database in production mode.
-3. Enable Storage in production mode.
-4. Enable Authentication > Email/Password.
-5. Run:
+```text
+lib/
+  models/       Data models and Firestore serialization
+  providers/    Riverpod providers
+  screens/      App screens and workflows
+  services/     Firebase, storage, export, search, update, and notification services
+  widgets/      Reusable UI components
+test/           Unit and widget tests
+integration_test/
+firebase.json   Firebase project config
+firestore.rules Firestore security rules
+storage.rules   Storage security rules
+deploy/         Public update manifest metadata
+```
+
+## Prerequisites
+
+- Flutter stable with Dart 3.10.3 or newer
+- Firebase CLI
+- FlutterFire CLI
+- Node.js and npm, used by Firebase CLI setup
+- Visual Studio with Desktop development for C++ for Windows builds
+- macOS and Xcode for iOS/macOS signing and distribution
+
+## Getting Started
+
+Clone the repo and install dependencies:
+
+```powershell
+git clone https://github.com/Excellonline/ct-companion.git
+cd ct-companion
+flutter pub get
+```
+
+Configure Firebase and deploy the rules:
 
 ```powershell
 .\setup.ps1
 ```
 
-The script installs/uses Firebase CLI and FlutterFire CLI, configures Android, iOS, and Windows, runs `flutter pub get`, and deploys Firestore/Storage rules.
+The setup script installs or uses Firebase CLI and FlutterFire CLI, configures Android, iOS, macOS, and Windows, runs `flutter pub get`, and deploys Firestore and Storage rules.
 
 After the first admin signs up, set their role in Firestore:
 
@@ -43,26 +92,34 @@ After the first admin signs up, set their role in Firestore:
 workspaces/cardtrove-team/members/<uid>.role = "admin"
 ```
 
-After that, admins can manage roles inside Settings > Team.
+After that, admins can manage roles from Settings > Team.
 
-Settings also includes Archive restore for notes, and admins get Backup Export.
-
-## Run
+## Running Locally
 
 ```powershell
 flutter run -d windows
 flutter run -d <android-device-id>
 ```
 
-iOS files are scaffolded, but iOS build/signing still needs macOS and Xcode.
+iOS and macOS projects are scaffolded, but signing and release builds still need macOS and Xcode.
 
-## Integration Test
+## Testing
+
+Run the main test suite:
+
+```powershell
+flutter test
+```
+
+Run the integration smoke test with a generated account password supplied at build time:
 
 ```powershell
 flutter test integration_test/app_e2e_test.dart --dart-define=CARDTROVE_E2E_PASSWORD=<password>
 ```
 
-## Data Layout
+The E2E test creates a temporary Firebase Auth user, exercises the core workspace flows, and cleans up the test data it created.
+
+## Firebase Data Model
 
 ```text
 workspaces/cardtrove-team/
@@ -80,6 +137,19 @@ workspaces/cardtrove-team/
 storage:
   workspaces/cardtrove-team/chat/{threadId}/{messageId}/{fileName}
   workspaces/cardtrove-team/shared-files/{fileId}/{fileName}
+  workspaces/cardtrove-team/notes/{noteId}/{attachmentId}/{fileName}
 ```
 
-Notes and to-dos keep creator/updater audit fields. Notes also support owner, due date, archive state, inbox state, and comments. Pipeline cards display who created the note, who updated it last, who owns it, and when it is due.
+Notes and to-dos keep creator and updater audit fields. Notes also support owner, due date, archive state, inbox state, checklist items, image attachments, and comments. Pipeline cards surface who created the note, who updated it last, who owns it, and when it is due.
+
+## Security Notes
+
+Firebase client configuration files are intentionally committed because they identify the Firebase project for client apps. Do not commit private keys, service account JSON, keystores, signing certificates, local `.env` files, or reusable test credentials.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the local workflow, testing checklist, and pull request expectations.
+
+## License
+
+No open source license has been selected yet. Until a license is added, all rights are reserved by the repository owner.

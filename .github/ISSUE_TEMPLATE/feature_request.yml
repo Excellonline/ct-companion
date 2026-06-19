@@ -1,0 +1,43 @@
+name: Feature request
+description: Suggest an improvement for CardTrove Companion.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What workflow or user need should this solve?
+      placeholder: Describe the job to be done.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would a good solution look like?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Notes
+        - Pipeline
+        - To-Do
+        - Chat
+        - Files
+        - Decisions
+        - Activity and notifications
+        - Admin and settings
+        - Platform/build
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add screenshots, examples, or constraints that would help.
