@@ -1,0 +1,149 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isCardTroveWorkspace(workspaceId) {
+      return workspaceId == 'cardtrove-team';
+    }
+
+    function memberPath() {
+      return /databases/$(database)/documents/workspaces/cardtrove-team/members/$(request.auth.uid);
+    }
+
+    function isMember() {
+      return signedIn() && exists(memberPath());
+    }
+
+    function isApprovedMember() {
+      return isMember() && get(memberPath()).data.role in ['member', 'admin'];
+    }
+
+    function isAdmin() {
+      return isMember() && get(memberPath()).data.role == 'admin';
+    }
+
+    function isMemberProfileUpdate() {
+      return resource.data.role == request.resource.data.role
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['email', 'displayName', 'lastSeenAt', 'updatedAt']);
+    }
+
+    match /workspaces/{workspaceId} {
+      allow read: if isCardTroveWorkspace(workspaceId) && isApprovedMember();
+      allow create, update: if isCardTroveWorkspace(workspaceId) && signedIn();
+      allow delete: if false;
+
+      match /members/{userId} {
+        allow read: if isCardTroveWorkspace(workspaceId)
+          && (
+            isApprovedMember()
+            || isAdmin()
+            || (signedIn() && request.auth.uid == userId)
+          );
+        allow create: if isCardTroveWorkspace(workspaceId)
+          && signedIn()
+          && request.auth.uid == userId
+          && request.resource.data.role == 'member';
+        allow update: if isCardTroveWorkspace(workspaceId)
+          && (
+            isAdmin()
+            || (
+              signedIn()
+              && request.auth.uid == userId
+              && isMemberProfileUpdate()
+            )
+          );
+        allow delete: if isCardTroveWorkspace(workspaceId)
+          && isAdmin()
+          && request.auth.uid != userId;
+      }
+
+      match /notes/{noteId} {
+        allow read, create, update: if isCardTroveWorkspace(workspaceId)
+          && isApprovedMember();
+        allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+
+        match /comments/{commentId} {
+          allow read, create: if isCardTroveWorkspace(workspaceId)
+            && isApprovedMember();
+          allow update, delete: if isCardTroveWorkspace(workspaceId)
+            && isAdmin();
+        }
+      }
+
+      match /folders/{folderId} {
+        allow read, create, update: if isCardTroveWorkspace(workspaceId)
+          && isApprovedMember();
+        allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+      }
+
+      match /todoItems/{itemId} {
+        allow read, create, update: if isCardTroveWorkspace(workspaceId)
+          && isApprovedMember();
+        allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+      }
+
+      match /sharedFiles/{fileId} {
+        allow read, create, update: if isCardTroveWorkspace(workspaceId)
+          && isApprovedMember();
+        allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+      }
+
+      match /activity/{activityId} {
+        allow read, create: if isCardTroveWorkspace(workspaceId)
+          && isApprovedMember();
+        allow update: if false;
+        allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+      }
+
+      match /decisions/{decisionId} {
+        allow read, create, update: if isCardTroveWorkspace(workspaceId)
+          && isApprovedMember();
+        allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+      }
+
+      match /liveShares/{shareId} {
+        allow read, create, update: if isCardTroveWorkspace(workspaceId)
+          && isApprovedMember();
+        allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+
+        match /strokes/{strokeId} {
+          allow read, create, update, delete: if isCardTroveWorkspace(workspaceId)
+            && isApprovedMember();
+        }
+      }
+
+      match /notifications/{notificationId} {
+        allow create: if isCardTroveWorkspace(workspaceId) && isApprovedMember();
+        allow read, update: if isCardTroveWorkspace(workspaceId)
+          && isApprovedMember()
+          && (resource.data.uid == request.auth.uid || isAdmin());
+        allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+      }
+
+      match /chatThreads/{threadId} {
+        allow read, create, update: if isCardTroveWorkspace(workspaceId)
+          && isApprovedMember();
+        allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+
+        match /messages/{messageId} {
+          allow read, create: if isCardTroveWorkspace(workspaceId)
+            && isApprovedMember();
+          allow update: if isCardTroveWorkspace(workspaceId)
+            && (
+              isAdmin()
+              || (
+                isApprovedMember()
+                && request.resource.data.diff(resource.data).affectedKeys()
+                  .hasOnly(['reactions'])
+              )
+            );
+          allow delete: if isCardTroveWorkspace(workspaceId) && isAdmin();
+        }
+      }
+    }
+  }
+}

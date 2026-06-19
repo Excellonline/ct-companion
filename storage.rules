@@ -1,0 +1,40 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function memberPath() {
+      return /databases/(default)/documents/workspaces/cardtrove-team/members/$(request.auth.uid);
+    }
+
+    function isMember() {
+      return signedIn() && firestore.exists(memberPath());
+    }
+
+    function isApprovedMember() {
+      return isMember()
+        && firestore.get(memberPath()).data.role in ['member', 'admin'];
+    }
+
+    function isAdmin() {
+      return isMember() && firestore.get(memberPath()).data.role == 'admin';
+    }
+
+    match /workspaces/cardtrove-team/chat/{allPaths=**} {
+      allow read, create, update: if isApprovedMember();
+      allow delete: if isAdmin();
+    }
+
+    match /workspaces/cardtrove-team/shared-files/{allPaths=**} {
+      allow read, create, update: if isApprovedMember();
+      allow delete: if isAdmin();
+    }
+
+    match /workspaces/cardtrove-team/notes/{allPaths=**} {
+      allow read, create, update: if isApprovedMember();
+      allow delete: if isAdmin();
+    }
+  }
+}

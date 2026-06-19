@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "app": "CardTrove Companion",
+  "bundleId": "io.cardtrove.companion",
+  "version": "0.1.10",
+  "buildNumber": "11",
+  "release": "0.1.10+11",
+  "releaseDate": "2026-06-18",
+  "notes": "Refreshes the desktop and iOS packages to use the cardtrove-companion Firebase project, fixes workspace joining, adds Remember me auto-login, and ships the transparent desktop icon.",
+  "appcastUrl": "https://cardtrove.help/appcast.xml",
+  "nativeAutoUpdate": false,
+  "downloads": {
+    "macos": {
+      "available": true,
+      "version": "0.1.10",
+      "buildNumber": "11",
+      "nativeAutoUpdate": false,
+      "url": "https://cardtrove.help/download.php?file=macos_zip"
+    },
+    "windows": {
+      "available": true,
+      "version": "0.1.10",
+      "buildNumber": "11",
+      "nativeAutoUpdate": false,
+      "url": "https://cardtrove.help/download.php?file=windows_zip"
+    },
+    "android": {
+      "available": true,
+      "version": "0.1.8",
+      "buildNumber": "9",
+      "nativeAutoUpdate": false,
+      "url": "https://cardtrove.help/download.php?file=android"
+    },
+    "ios": {
+      "available": true,
+      "version": "0.1.10",
+      "buildNumber": "11",
+      "nativeAutoUpdate": false,
+      "url": "https://cardtrove.help/download.php?file=ios_ipa",
+      "latestArchiveAvailable": true,
+      "latestArchiveVersion": "0.1.10",
+      "latestArchiveBuildNumber": "11",
+      "latestArchiveUrl": "https://cardtrove.help/download.php?file=ios_archive_zip",
+      "ipaExportBlockedBy": "App Store/TestFlight export still needs an Apple account/provisioning profile for io.cardtrove.companion. Current IPA is Apple Development-signed for Bella's iPhone only."
+    }
+  }
+}
