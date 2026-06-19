@@ -93,11 +93,9 @@ class _LiveShareScreenState extends ConsumerState<LiveShareScreen> {
     setState(() => _busy = true);
     try {
       final boardId = await _ensureBoard();
-      await ref.read(liveShareServiceProvider).updateBoardImage(
-            boardId: boardId,
-            fileName: fileName,
-            bytes: bytes,
-          );
+      await ref
+          .read(liveShareServiceProvider)
+          .updateBoardImage(boardId: boardId, fileName: fileName, bytes: bytes);
       await ref.read(liveShareServiceProvider).clearStrokes(boardId);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -116,9 +114,9 @@ class _LiveShareScreenState extends ConsumerState<LiveShareScreen> {
     try {
       await ref.read(liveShareServiceProvider).saveBoard(boardId);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Live Share saved.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Live Share saved.')));
       }
     } catch (error) {
       _showError('Save failed: $error');
@@ -132,10 +130,9 @@ class _LiveShareScreenState extends ConsumerState<LiveShareScreen> {
     setState(() => _busy = true);
     try {
       final bytes = await _captureCanvas();
-      await ref.read(liveShareServiceProvider).pushToPipeline(
-            board: board,
-            renderedBytes: bytes,
-          );
+      await ref
+          .read(liveShareServiceProvider)
+          .pushToPipeline(board: board, renderedBytes: bytes);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Pushed to Pipeline as a note.')),
@@ -222,7 +219,8 @@ class _LiveShareScreenState extends ConsumerState<LiveShareScreen> {
     if (updated.points.length - _lastSyncedPointCount >= 4) {
       _lastSyncedPointCount = updated.points.length;
       unawaited(
-          ref.read(liveShareServiceProvider).upsertStroke(boardId, updated));
+        ref.read(liveShareServiceProvider).upsertStroke(boardId, updated),
+      );
     }
   }
 
@@ -237,9 +235,9 @@ class _LiveShareScreenState extends ConsumerState<LiveShareScreen> {
   }
 
   Offset _normalize(Offset point, Size size) => Offset(
-        (point.dx / size.width).clamp(0, 1).toDouble(),
-        (point.dy / size.height).clamp(0, 1).toDouble(),
-      );
+    (point.dx / size.width).clamp(0, 1).toDouble(),
+    (point.dy / size.height).clamp(0, 1).toDouble(),
+  );
 
   int _colorToArgb32(Color color) =>
       (color.a * 255).round() << 24 |
@@ -249,9 +247,9 @@ class _LiveShareScreenState extends ConsumerState<LiveShareScreen> {
 
   void _showError(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -351,10 +349,7 @@ class _LiveShareScreenState extends ConsumerState<LiveShareScreen> {
     return selectedBoardAsync.when(
       data: (board) {
         if (board == null) {
-          return _NoLiveShareSelected(
-            busy: _busy,
-            onNew: _createBoard,
-          );
+          return _NoLiveShareSelected(busy: _busy, onNew: _createBoard);
         }
         return _LiveShareWorkspace(
           board: board,
@@ -381,9 +376,8 @@ class _LiveShareScreenState extends ConsumerState<LiveShareScreen> {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(
-        child: Text('Could not load Live Share:\n$error'),
-      ),
+      error: (error, _) =>
+          Center(child: Text('Could not load Live Share:\n$error')),
     );
   }
 }
@@ -641,8 +635,9 @@ class _LiveShareWorkspace extends ConsumerWidget {
                         ),
                         IconButton.filledTonal(
                           tooltip: 'Push to Pipeline',
-                          onPressed:
-                              board.hasImage && !busy ? onPushToPipeline : null,
+                          onPressed: board.hasImage && !busy
+                              ? onPushToPipeline
+                              : null,
                           icon: const Icon(Icons.account_tree_outlined),
                         ),
                       ],
@@ -685,8 +680,9 @@ class _LiveShareWorkspace extends ConsumerWidget {
                     FilledButton.icon(
                       icon: const Icon(Icons.account_tree_outlined),
                       label: const Text('Push to Pipeline'),
-                      onPressed:
-                          board.hasImage && !busy ? onPushToPipeline : null,
+                      onPressed: board.hasImage && !busy
+                          ? onPushToPipeline
+                          : null,
                     ),
                   ],
                 ),
@@ -726,9 +722,11 @@ class _LiveShareWorkspace extends ConsumerWidget {
                             final visibleStrokes = draftStroke == null
                                 ? strokes
                                 : strokes
-                                    .where((stroke) =>
-                                        stroke.id != draftStroke!.id)
-                                    .toList();
+                                      .where(
+                                        (stroke) =>
+                                            stroke.id != draftStroke!.id,
+                                      )
+                                      .toList();
                             return Center(
                               child: RepaintBoundary(
                                 key: canvasKey,
@@ -738,8 +736,10 @@ class _LiveShareWorkspace extends ConsumerWidget {
                                   child: Stack(
                                     fit: StackFit.expand,
                                     children: [
-                                      Image.memory(imageBytes,
-                                          fit: BoxFit.fill),
+                                      Image.memory(
+                                        imageBytes,
+                                        fit: BoxFit.fill,
+                                      ),
                                       GestureDetector(
                                         behavior: HitTestBehavior.opaque,
                                         onPanStart: (details) => onStartStroke(
@@ -748,9 +748,9 @@ class _LiveShareWorkspace extends ConsumerWidget {
                                         ),
                                         onPanUpdate: (details) =>
                                             onAppendStroke(
-                                          imageSize,
-                                          details.localPosition,
-                                        ),
+                                              imageSize,
+                                              details.localPosition,
+                                            ),
                                         onPanEnd: (_) => onEndStroke(),
                                         onPanCancel: onEndStroke,
                                         child: CustomPaint(
@@ -783,9 +783,8 @@ class _LiveShareWorkspace extends ConsumerWidget {
               ],
             ),
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, _) => Center(
-              child: Text('Could not load realtime edits:\n$error'),
-            ),
+            error: (error, _) =>
+                Center(child: Text('Could not load realtime edits:\n$error')),
           ),
         ),
       ],
@@ -921,10 +920,7 @@ class _LiveShareToolbar extends StatelessWidget {
         minimum: const EdgeInsets.fromLTRB(12, 6, 12, 4),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: controls,
-          ),
+          child: Row(mainAxisSize: MainAxisSize.min, children: controls),
         ),
       );
     }
@@ -960,7 +956,10 @@ class _LiveSharePainter extends CustomPainter {
         ..style = PaintingStyle.stroke;
       if (stroke.points.length == 1) {
         canvas.drawCircle(
-            _denormalize(stroke.points.first, size), stroke.width / 2, paint);
+          _denormalize(stroke.points.first, size),
+          stroke.width / 2,
+          paint,
+        );
         continue;
       }
       final path = Path()
@@ -1013,10 +1012,7 @@ class _ColorButton extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(3),
             child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               child: const SizedBox(width: 22, height: 22),
             ),
           ),
@@ -1030,10 +1026,7 @@ class _NoLiveShareSelected extends StatelessWidget {
   final bool busy;
   final VoidCallback onNew;
 
-  const _NoLiveShareSelected({
-    required this.busy,
-    required this.onNew,
-  });
+  const _NoLiveShareSelected({required this.busy, required this.onNew});
 
   @override
   Widget build(BuildContext context) {

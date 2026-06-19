@@ -40,13 +40,13 @@ class QuickItem {
   }
 
   Map<String, dynamic> toFirestore() => {
-        'text': text,
-        'done': done,
-        'createdByUid': createdByUid,
-        'createdByName': createdByName,
-        'updatedByUid': updatedByUid,
-        'updatedByName': updatedByName,
-        'createdAt': Timestamp.fromDate(createdAt),
-        'updatedAt': Timestamp.fromDate(updatedAt),
-      };
+    'text': text,
+    'done': done,
+    'createdByUid': createdByUid,
+    'createdByName': createdByName,
+    'updatedByUid': updatedByUid,
+    'updatedByName': updatedByName,
+    'createdAt': Timestamp.fromDate(createdAt),
+    'updatedAt': Timestamp.fromDate(updatedAt),
+  };
 }

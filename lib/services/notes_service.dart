@@ -224,14 +224,10 @@ class NotesService {
     final idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (idToken == null) throw StateError('Not signed in.');
 
-    final uri = Uri.https(
-      'firebasestorage.googleapis.com',
-      '/v0/b/$bucket/o',
-      {
-        'uploadType': 'media',
-        'name': storagePath,
-      },
-    );
+    final uri = Uri.https('firebasestorage.googleapis.com', '/v0/b/$bucket/o', {
+      'uploadType': 'media',
+      'name': storagePath,
+    });
 
     final response = await http.post(
       uri,

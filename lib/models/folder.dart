@@ -24,8 +24,8 @@ class Folder {
   }
 
   Map<String, dynamic> toFirestore() => {
-        'name': name,
-        'color': color,
-        'createdAt': Timestamp.fromDate(createdAt),
-      };
+    'name': name,
+    'color': color,
+    'createdAt': Timestamp.fromDate(createdAt),
+  };
 }

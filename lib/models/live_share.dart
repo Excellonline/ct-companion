@@ -41,19 +41,19 @@ class LiveShareBoard {
   }
 
   factory LiveShareBoard.empty(String id) => LiveShareBoard(
-        id: id,
-        title: 'Untitled live share',
-        imageName: '',
-        imageDataBase64: '',
-        imageMimeType: 'image/jpeg',
-        imageWidth: 0,
-        imageHeight: 0,
-        createdByName: 'Team member',
-        updatedByName: 'Team member',
-        savedAt: null,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
+    id: id,
+    title: 'Untitled live share',
+    imageName: '',
+    imageDataBase64: '',
+    imageMimeType: 'image/jpeg',
+    imageWidth: 0,
+    imageHeight: 0,
+    createdByName: 'Team member',
+    updatedByName: 'Team member',
+    savedAt: null,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+  );
 
   factory LiveShareBoard.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? const {};
@@ -105,10 +105,12 @@ class LiveShareStroke {
       width: (data['width'] as num?)?.toDouble() ?? 5,
       points: ((data['points'] as List?) ?? const [])
           .whereType<Map>()
-          .map((point) => Offset(
-                (point['x'] as num?)?.toDouble() ?? 0,
-                (point['y'] as num?)?.toDouble() ?? 0,
-              ))
+          .map(
+            (point) => Offset(
+              (point['x'] as num?)?.toDouble() ?? 0,
+              (point['y'] as num?)?.toDouble() ?? 0,
+            ),
+          )
           .toList(),
       createdByUid: data['createdByUid'] as String? ?? '',
       createdByName: data['createdByName'] as String? ?? 'Team member',
@@ -118,14 +120,14 @@ class LiveShareStroke {
   }
 
   Map<String, dynamic> toFirestore() => {
-        'colorValue': colorValue,
-        'width': width,
-        'points': [
-          for (final point in points) {'x': point.dx, 'y': point.dy},
-        ],
-        'createdByUid': createdByUid,
-        'createdByName': createdByName,
-        'createdAt': Timestamp.fromDate(createdAt),
-        'updatedAt': Timestamp.fromDate(updatedAt),
-      };
+    'colorValue': colorValue,
+    'width': width,
+    'points': [
+      for (final point in points) {'x': point.dx, 'y': point.dy},
+    ],
+    'createdByUid': createdByUid,
+    'createdByName': createdByName,
+    'createdAt': Timestamp.fromDate(createdAt),
+    'updatedAt': Timestamp.fromDate(updatedAt),
+  };
 }

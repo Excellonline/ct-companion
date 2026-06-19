@@ -63,12 +63,11 @@ class TeamMember {
   }
 
   Map<String, dynamic> toFirestore() => {
-        'email': email,
-        'displayName': displayName,
-        'role': role.id,
-        'createdAt': Timestamp.fromDate(createdAt),
-        'updatedAt': Timestamp.fromDate(updatedAt),
-        'lastSeenAt':
-            lastSeenAt == null ? null : Timestamp.fromDate(lastSeenAt!),
-      };
+    'email': email,
+    'displayName': displayName,
+    'role': role.id,
+    'createdAt': Timestamp.fromDate(createdAt),
+    'updatedAt': Timestamp.fromDate(updatedAt),
+    'lastSeenAt': lastSeenAt == null ? null : Timestamp.fromDate(lastSeenAt!),
+  };
 }

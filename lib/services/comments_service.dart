@@ -21,8 +21,14 @@ class CommentsService {
       _notesCol.doc(noteId).collection('comments');
 
   Stream<List<NoteComment>> commentsStream(String noteId) =>
-      _commentsCol(noteId).orderBy('createdAt').snapshots().map((s) =>
-          s.docs.map((doc) => NoteComment.fromFirestore(noteId, doc)).toList());
+      _commentsCol(noteId)
+          .orderBy('createdAt')
+          .snapshots()
+          .map(
+            (s) => s.docs
+                .map((doc) => NoteComment.fromFirestore(noteId, doc))
+                .toList(),
+          );
 
   Future<void> addComment({
     required String noteId,

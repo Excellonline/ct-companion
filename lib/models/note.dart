@@ -46,17 +46,14 @@ class ChecklistItem {
 
   ChecklistItem({required this.id, required this.text, required this.done});
 
-  ChecklistItem copyWith({String? text, bool? done}) => ChecklistItem(
-        id: id,
-        text: text ?? this.text,
-        done: done ?? this.done,
-      );
+  ChecklistItem copyWith({String? text, bool? done}) =>
+      ChecklistItem(id: id, text: text ?? this.text, done: done ?? this.done);
 
   factory ChecklistItem.fromMap(Map<String, dynamic> map) => ChecklistItem(
-        id: map['id'] as String,
-        text: map['text'] as String? ?? '',
-        done: map['done'] as bool? ?? false,
-      );
+    id: map['id'] as String,
+    text: map['text'] as String? ?? '',
+    done: map['done'] as bool? ?? false,
+  );
 
   Map<String, dynamic> toMap() => {'id': id, 'text': text, 'done': done};
 }
@@ -110,15 +107,15 @@ class NoteAttachment {
   }
 
   Map<String, dynamic> toMap() => {
-        'id': id,
-        'name': name,
-        'url': url,
-        'storagePath': storagePath,
-        'dataBase64': dataBase64,
-        'sizeBytes': sizeBytes,
-        'contentType': contentType,
-        'createdAt': createdAt == null ? null : Timestamp.fromDate(createdAt!),
-      };
+    'id': id,
+    'name': name,
+    'url': url,
+    'storagePath': storagePath,
+    'dataBase64': dataBase64,
+    'sizeBytes': sizeBytes,
+    'contentType': contentType,
+    'createdAt': createdAt == null ? null : Timestamp.fromDate(createdAt!),
+  };
 }
 
 class Note {
@@ -239,13 +236,12 @@ class Note {
       type: data['type'] == 'checklist' ? NoteType.checklist : NoteType.note,
       items: ((data['items'] as List?) ?? const [])
           .map(
-              (e) => ChecklistItem.fromMap(Map<String, dynamic>.from(e as Map)))
+            (e) => ChecklistItem.fromMap(Map<String, dynamic>.from(e as Map)),
+          )
           .toList(),
       attachments: ((data['attachments'] as List?) ?? const [])
           .map(
-            (e) => NoteAttachment.fromMap(
-              Map<String, dynamic>.from(e as Map),
-            ),
+            (e) => NoteAttachment.fromMap(Map<String, dynamic>.from(e as Map)),
           )
           .toList(),
       tags: ((data['tags'] as List?) ?? const []).cast<String>(),
@@ -263,7 +259,7 @@ class Note {
       pipelineStage: addedAt == null
           ? null
           : PipelineStage.fromId(data['pipelineStage'] as String?) ??
-              PipelineStage.ideas,
+                PipelineStage.ideas,
       createdByUid: data['createdByUid'] as String?,
       createdByName: data['createdByName'] as String?,
       createdByEmail: data['createdByEmail'] as String?,
@@ -276,35 +272,33 @@ class Note {
   }
 
   Map<String, dynamic> toFirestore() => {
-        'title': title,
-        'body': body,
-        'type': type.name,
-        'items': items.map((i) => i.toMap()).toList(),
-        'attachments': attachments.map((a) => a.toMap()).toList(),
-        'tags': tags,
-        'folderId': folderId,
-        'reminderAt':
-            reminderAt == null ? null : Timestamp.fromDate(reminderAt!),
-        'priority': priority.id,
-        'pinned': pinned,
-        'ownerUid': ownerUid,
-        'ownerName': ownerName,
-        'ownerEmail': ownerEmail,
-        'dueAt': dueAt == null ? null : Timestamp.fromDate(dueAt!),
-        'archivedAt':
-            archivedAt == null ? null : Timestamp.fromDate(archivedAt!),
-        'inInbox': inInbox,
-        'pipelineAddedAt': pipelineAddedAt == null
-            ? null
-            : Timestamp.fromDate(pipelineAddedAt!),
-        'pipelineStage': pipelineStage?.id,
-        'createdByUid': createdByUid,
-        'createdByName': createdByName,
-        'createdByEmail': createdByEmail,
-        'updatedByUid': updatedByUid,
-        'updatedByName': updatedByName,
-        'updatedByEmail': updatedByEmail,
-        'createdAt': Timestamp.fromDate(createdAt),
-        'updatedAt': Timestamp.fromDate(updatedAt),
-      };
+    'title': title,
+    'body': body,
+    'type': type.name,
+    'items': items.map((i) => i.toMap()).toList(),
+    'attachments': attachments.map((a) => a.toMap()).toList(),
+    'tags': tags,
+    'folderId': folderId,
+    'reminderAt': reminderAt == null ? null : Timestamp.fromDate(reminderAt!),
+    'priority': priority.id,
+    'pinned': pinned,
+    'ownerUid': ownerUid,
+    'ownerName': ownerName,
+    'ownerEmail': ownerEmail,
+    'dueAt': dueAt == null ? null : Timestamp.fromDate(dueAt!),
+    'archivedAt': archivedAt == null ? null : Timestamp.fromDate(archivedAt!),
+    'inInbox': inInbox,
+    'pipelineAddedAt': pipelineAddedAt == null
+        ? null
+        : Timestamp.fromDate(pipelineAddedAt!),
+    'pipelineStage': pipelineStage?.id,
+    'createdByUid': createdByUid,
+    'createdByName': createdByName,
+    'createdByEmail': createdByEmail,
+    'updatedByUid': updatedByUid,
+    'updatedByName': updatedByName,
+    'updatedByEmail': updatedByEmail,
+    'createdAt': Timestamp.fromDate(createdAt),
+    'updatedAt': Timestamp.fromDate(updatedAt),
+  };
 }

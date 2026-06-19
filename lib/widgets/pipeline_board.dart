@@ -67,7 +67,9 @@ class PipelineBoard extends ConsumerWidget {
             child: fits
                 ? row
                 : SingleChildScrollView(
-                    scrollDirection: Axis.horizontal, child: row),
+                    scrollDirection: Axis.horizontal,
+                    child: row,
+                  ),
           );
         },
       ),
@@ -75,8 +77,10 @@ class PipelineBoard extends ConsumerWidget {
       error: (e, _) => Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child:
-              Text('Failed to load pipeline:\n$e', textAlign: TextAlign.center),
+          child: Text(
+            'Failed to load pipeline:\n$e',
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );

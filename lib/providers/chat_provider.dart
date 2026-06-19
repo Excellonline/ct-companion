@@ -17,8 +17,10 @@ final chatThreadsProvider = StreamProvider<List<ChatThread>>((ref) {
   return ref.watch(chatServiceProvider).threadsStream();
 });
 
-final chatMessagesProvider =
-    StreamProvider.family<List<ChatMessage>, String>((ref, threadId) {
+final chatMessagesProvider = StreamProvider.family<List<ChatMessage>, String>((
+  ref,
+  threadId,
+) {
   final user = ref.watch(authStateProvider).valueOrNull;
   if (user == null || threadId.isEmpty) {
     return Stream<List<ChatMessage>>.value(const []);

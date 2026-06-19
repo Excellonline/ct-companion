@@ -5,8 +5,9 @@ import '../services/notifications_service.dart';
 import 'auth_provider.dart';
 import 'team_provider.dart';
 
-final notificationsServiceProvider =
-    Provider<NotificationsService>((ref) => NotificationsService());
+final notificationsServiceProvider = Provider<NotificationsService>(
+  (ref) => NotificationsService(),
+);
 
 final notificationsProvider = StreamProvider<List<AppNotification>>((ref) {
   final user = ref.watch(authStateProvider).valueOrNull;

@@ -5,8 +5,9 @@ import '../services/live_share_service.dart';
 import 'auth_provider.dart';
 import 'team_provider.dart';
 
-final liveShareServiceProvider =
-    Provider<LiveShareService>((ref) => LiveShareService());
+final liveShareServiceProvider = Provider<LiveShareService>(
+  (ref) => LiveShareService(),
+);
 
 final selectedLiveShareIdProvider = StateProvider<String?>((ref) => null);
 
@@ -27,8 +28,8 @@ final selectedLiveShareProvider = StreamProvider<LiveShareBoard?>((ref) {
 
 final liveShareStrokesProvider =
     StreamProvider.family<List<LiveShareStroke>, String>((ref, boardId) {
-  final user = ref.watch(authStateProvider).valueOrNull;
-  if (user == null) return Stream<List<LiveShareStroke>>.value(const []);
-  ref.watch(memberBootstrapProvider);
-  return ref.watch(liveShareServiceProvider).strokesStream(boardId);
-});
+      final user = ref.watch(authStateProvider).valueOrNull;
+      if (user == null) return Stream<List<LiveShareStroke>>.value(const []);
+      ref.watch(memberBootstrapProvider);
+      return ref.watch(liveShareServiceProvider).strokesStream(boardId);
+    });

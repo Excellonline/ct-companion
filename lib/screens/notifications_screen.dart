@@ -42,8 +42,11 @@ class NotificationsScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (item.body.isNotEmpty)
-                          Text(item.body,
-                              maxLines: 2, overflow: TextOverflow.ellipsis),
+                          Text(
+                            item.body,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         Text(
                           DateFormat.MMMd().add_jm().format(item.createdAt),
                           style: TextStyle(
@@ -81,8 +84,10 @@ class _EmptyNotifications extends StatelessWidget {
           const SizedBox(height: 16),
           const Text('All caught up'),
           const SizedBox(height: 4),
-          Text('Mentions and team alerts will show here',
-              style: TextStyle(color: hint)),
+          Text(
+            'Mentions and team alerts will show here',
+            style: TextStyle(color: hint),
+          ),
         ],
       ),
     );

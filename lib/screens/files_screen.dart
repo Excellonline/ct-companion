@@ -31,9 +31,9 @@ class _FilesScreenState extends ConsumerState<FilesScreen> {
       await ref.read(filesServiceProvider).uploadFiles(result.files);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Upload failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Upload failed: $e')));
       }
     } finally {
       if (mounted) setState(() => _uploading = false);
@@ -49,11 +49,7 @@ class _FilesScreenState extends ConsumerState<FilesScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _FilesHeader(
-          filter: filter,
-          uploading: _uploading,
-          onUpload: _upload,
-        ),
+        _FilesHeader(filter: filter, uploading: _uploading, onUpload: _upload),
         const Divider(height: 1),
         Expanded(
           child: filesAsync.when(
@@ -76,11 +72,11 @@ class _FilesScreenState extends ConsumerState<FilesScreen> {
                         padding: const EdgeInsets.all(18),
                         gridDelegate:
                             const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 360,
-                          mainAxisExtent: 150,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
-                        ),
+                              maxCrossAxisExtent: 360,
+                              mainAxisExtent: 150,
+                              mainAxisSpacing: 12,
+                              crossAxisSpacing: 12,
+                            ),
                         itemCount: files.length,
                         itemBuilder: (context, index) =>
                             _FileTile(file: files[index]),
@@ -91,8 +87,10 @@ class _FilesScreenState extends ConsumerState<FilesScreen> {
             error: (e, _) => Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text('Failed to load files:\n$e',
-                    textAlign: TextAlign.center),
+                child: Text(
+                  'Failed to load files:\n$e',
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
@@ -130,15 +128,15 @@ class _FilesHeader extends ConsumerWidget {
               children: [
                 Text(
                   'Shared Files',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 Text(
                   'Docs, references, exports, and team handoffs',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).hintColor,
-                      ),
+                    color: Theme.of(context).hintColor,
+                  ),
                 ),
               ],
             ),
@@ -252,8 +250,8 @@ class _FileTile extends ConsumerWidget {
                     child: Text(
                       file.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                        fontWeight: FontWeight.w700,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -269,14 +267,18 @@ class _FileTile extends ConsumerWidget {
               const Spacer(),
               Text(
                 '${file.kind.label} | ${file.sizeLabel}',
-                style:
-                    TextStyle(fontSize: 12, color: Theme.of(context).hintColor),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).hintColor,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
                 'Shared by ${file.createdByName} on ${DateFormat.MMMd().add_jm().format(file.createdAt)}',
-                style:
-                    TextStyle(fontSize: 12, color: Theme.of(context).hintColor),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).hintColor,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

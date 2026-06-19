@@ -54,9 +54,7 @@ void main() {
         title: 'Project ideas',
         body: '',
         type: NoteType.checklist,
-        items: [
-          ChecklistItem(id: 'a', text: 'Build a notes app', done: false),
-        ],
+        items: [ChecklistItem(id: 'a', text: 'Build a notes app', done: false)],
         tags: const [],
         folderId: null,
         reminderAt: null,

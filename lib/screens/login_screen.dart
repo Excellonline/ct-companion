@@ -214,7 +214,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         },
                   title: const Text('Remember me on this device'),
                   subtitle: const Text(
-                      'Open CardTrove without signing in next time.'),
+                    'Open CardTrove without signing in next time.',
+                  ),
                   controlAffinity: ListTileControlAffinity.leading,
                   contentPadding: EdgeInsets.zero,
                   dense: true,
@@ -243,9 +244,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onPressed: _busy
                       ? null
                       : () => setState(() {
-                            _isSignUp = !_isSignUp;
-                            _err = null;
-                          }),
+                          _isSignUp = !_isSignUp;
+                          _err = null;
+                        }),
                   child: Text(
                     _isSignUp
                         ? 'Already have an account? Sign in'

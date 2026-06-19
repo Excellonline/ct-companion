@@ -5,8 +5,9 @@ import '../services/activity_service.dart';
 import 'auth_provider.dart';
 import 'team_provider.dart';
 
-final activityServiceProvider =
-    Provider<ActivityService>((ref) => ActivityService());
+final activityServiceProvider = Provider<ActivityService>(
+  (ref) => ActivityService(),
+);
 
 final activityStreamProvider = StreamProvider<List<ActivityItem>>((ref) {
   final user = ref.watch(authStateProvider).valueOrNull;

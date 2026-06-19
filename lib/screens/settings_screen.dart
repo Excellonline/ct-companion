@@ -137,14 +137,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     try {
       await ref.read(teamServiceProvider).updateCurrentUserDisplayName(trimmed);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Display name updated.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Display name updated.')));
     } catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$error')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('$error')));
     } finally {
       if (mounted) {
         setState(() {
@@ -166,8 +166,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final displayName = memberDisplayName.isNotEmpty
         ? memberDisplayName
         : authDisplayName.isNotEmpty
-            ? authDisplayName
-            : '';
+        ? authDisplayName
+        : '';
 
     Future<void> confirmSignOut() async {
       final navigator = Navigator.of(context);
@@ -220,8 +220,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Icon(Icons.edit_outlined),
-            onTap:
-                _savingDisplayName ? null : () => _editDisplayName(displayName),
+            onTap: _savingDisplayName
+                ? null
+                : () => _editDisplayName(displayName),
           ),
           ListTile(
             leading: const Icon(Icons.badge_outlined),
@@ -231,8 +232,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.groups_outlined),
             title: const Text('Team & Roles'),
-            subtitle:
-                const Text('Approve users, edit profiles, and manage roles'),
+            subtitle: const Text(
+              'Approve users, edit profiles, and manage roles',
+            ),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const TeamScreen()),
@@ -379,8 +381,8 @@ class _DesktopUpdateTile extends StatelessWidget {
           onPressed: busy || isUpToDate
               ? null
               : hasUpdate
-                  ? onDownload
-                  : onCheck,
+              ? onDownload
+              : onCheck,
           icon: busy
               ? const SizedBox.square(
                   dimension: 18,

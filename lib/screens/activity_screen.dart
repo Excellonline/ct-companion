@@ -47,9 +47,7 @@ class _ActivityTile extends StatelessWidget {
     final hint = Theme.of(context).hintColor;
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 6),
-      leading: CircleAvatar(
-        child: Icon(_iconFor(item.type)),
-      ),
+      leading: CircleAvatar(child: Icon(_iconFor(item.type))),
       title: Text(item.title),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

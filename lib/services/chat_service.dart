@@ -86,8 +86,8 @@ class ChatService {
     final preview = trimmed.isNotEmpty
         ? trimmed
         : attachments.length == 1
-            ? 'Shared ${attachments.single.name}'
-            : 'Shared ${attachments.length} attachments';
+        ? 'Shared ${attachments.single.name}'
+        : 'Shared ${attachments.length} attachments';
 
     final batch = _db.batch();
     batch.set(messageRef, {
@@ -104,15 +104,11 @@ class ChatService {
         ).toMap(),
       'createdAt': now,
     });
-    batch.set(
-      _threadsCol.doc(threadId),
-      {
-        ...actor.updatedAuditFields(),
-        'lastMessagePreview': preview,
-        'updatedAt': now,
-      },
-      SetOptions(merge: true),
-    );
+    batch.set(_threadsCol.doc(threadId), {
+      ...actor.updatedAuditFields(),
+      'lastMessagePreview': preview,
+      'updatedAt': now,
+    }, SetOptions(merge: true));
     await batch.commit();
     await _activity.log(
       type: 'chat_message',
@@ -144,14 +140,15 @@ class ChatService {
     await _db.runTransaction((transaction) async {
       final snapshot = await transaction.get(ref);
       final data = snapshot.data() ?? const <String, dynamic>{};
-      final reactions =
-          Map<String, dynamic>.from(data['reactions'] as Map? ?? const {});
+      final reactions = Map<String, dynamic>.from(
+        data['reactions'] as Map? ?? const {},
+      );
       final existing = reactions[actor.uid];
       final existingType = existing is Map
           ? existing['type'] as String?
           : existing is String
-              ? existing
-              : null;
+          ? existing
+          : null;
 
       if (existingType == reaction) {
         transaction.update(ref, {
@@ -205,12 +202,14 @@ class ChatService {
     }
 
     final ref = _storage.ref(storagePath);
-    final metadata = SettableMetadata(customMetadata: {
-      'originalName': file.name,
-      'workspaceId': cardTroveWorkspaceId,
-      'threadId': threadId,
-      'messageId': messageId,
-    });
+    final metadata = SettableMetadata(
+      customMetadata: {
+        'originalName': file.name,
+        'workspaceId': cardTroveWorkspaceId,
+        'threadId': threadId,
+        'messageId': messageId,
+      },
+    );
 
     if (file.bytes != null) {
       await ref.putData(file.bytes!, metadata);
@@ -242,18 +241,15 @@ class ChatService {
     final idToken = await user?.getIdToken();
     if (idToken == null) throw StateError('Not signed in.');
 
-    final bytes = file.bytes ??
+    final bytes =
+        file.bytes ??
         (file.path == null ? null : await File(file.path!).readAsBytes());
     if (bytes == null) throw StateError('Could not read ${file.name}.');
 
-    final uri = Uri.https(
-      'firebasestorage.googleapis.com',
-      '/v0/b/$bucket/o',
-      {
-        'uploadType': 'media',
-        'name': storagePath,
-      },
-    );
+    final uri = Uri.https('firebasestorage.googleapis.com', '/v0/b/$bucket/o', {
+      'uploadType': 'media',
+      'name': storagePath,
+    });
 
     final response = await http.post(
       uri,

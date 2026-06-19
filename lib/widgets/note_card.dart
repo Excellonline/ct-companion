@@ -32,9 +32,7 @@ class NoteCard extends StatelessWidget {
       color: priorityBackground,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: priorityColor.withValues(alpha: 0.55),
-        ),
+        side: BorderSide(color: priorityColor.withValues(alpha: 0.55)),
       ),
       child: InkWell(
         onTap: onTap,
@@ -101,7 +99,9 @@ class NoteCard extends StatelessWidget {
               ],
               if (note.type == NoteType.checklist && note.items.isNotEmpty) ...[
                 const SizedBox(height: 6),
-                ...note.items.take(4).map(
+                ...note.items
+                    .take(4)
+                    .map(
                       (i) => Padding(
                         padding: const EdgeInsets.only(top: 2),
                         child: Row(
@@ -167,11 +167,7 @@ class NoteCard extends StatelessWidget {
               const SizedBox(height: 6),
               Row(
                 children: [
-                  Icon(
-                    Icons.flag,
-                    size: 14,
-                    color: priorityColor,
-                  ),
+                  Icon(Icons.flag, size: 14, color: priorityColor),
                   const SizedBox(width: 6),
                   if (note.tags.isNotEmpty) ...[
                     Icon(Icons.label_outline, size: 14, color: hint),
@@ -202,7 +198,8 @@ class NoteCard extends StatelessWidget {
                   ].join(' | '),
                   style: TextStyle(
                     fontSize: 11,
-                    color: note.dueAt != null &&
+                    color:
+                        note.dueAt != null &&
                             note.dueAt!.isBefore(DateTime.now())
                         ? Theme.of(context).colorScheme.error
                         : hint,

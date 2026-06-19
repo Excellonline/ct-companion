@@ -18,11 +18,15 @@ class DecisionsService {
       _workspaceRef.collection('decisions');
 
   Stream<List<Decision>> decisionsStream({bool includeArchived = false}) =>
-      _decisionsCol.orderBy('updatedAt', descending: true).snapshots().map(
-          (s) => s.docs
-              .map(Decision.fromFirestore)
-              .where((d) => includeArchived || !d.isArchived)
-              .toList());
+      _decisionsCol
+          .orderBy('updatedAt', descending: true)
+          .snapshots()
+          .map(
+            (s) => s.docs
+                .map(Decision.fromFirestore)
+                .where((d) => includeArchived || !d.isArchived)
+                .toList(),
+          );
 
   Future<void> createDecision({
     required String title,

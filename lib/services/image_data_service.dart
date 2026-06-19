@@ -59,8 +59,9 @@ class ImageDataService {
   }
 
   static img.Image _resizeToFit(img.Image source, int maxDimension) {
-    final longestSide =
-        source.width > source.height ? source.width : source.height;
+    final longestSide = source.width > source.height
+        ? source.width
+        : source.height;
     if (longestSide <= maxDimension) return source;
 
     if (source.width >= source.height) {

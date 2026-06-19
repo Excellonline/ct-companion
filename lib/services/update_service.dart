@@ -10,16 +10,9 @@ const cardTroveUpdateManifestUrl = 'https://cardtrove.help/updates.json';
 const cardTroveAppcastUrl = 'https://cardtrove.help/appcast.xml';
 const cardTroveDownloadsUrl = 'https://cardtrove.help/';
 
-enum UpdateCheckStatus {
-  unsupported,
-  upToDate,
-  available,
-}
+enum UpdateCheckStatus { unsupported, upToDate, available }
 
-enum UpdateLaunchMode {
-  nativeUpdater,
-  downloadPage,
-}
+enum UpdateLaunchMode { nativeUpdater, downloadPage }
 
 class UpdateCheckException implements Exception {
   final String message;
@@ -124,8 +117,9 @@ class UpdateService {
     );
 
     return UpdateCheckResult(
-      status:
-          isNewer ? UpdateCheckStatus.available : UpdateCheckStatus.upToDate,
+      status: isNewer
+          ? UpdateCheckStatus.available
+          : UpdateCheckStatus.upToDate,
       currentVersion: currentVersion,
       currentBuildNumber: currentBuildNumber,
       release: release,
@@ -142,7 +136,8 @@ class UpdateService {
       return UpdateLaunchMode.downloadPage;
     }
 
-    final appcastUrl = result.release?.appcastUrl ??
+    final appcastUrl =
+        result.release?.appcastUrl ??
         Uri.tryParse(cardTroveAppcastUrl) ??
         Uri.parse(cardTroveDownloadsUrl);
 
@@ -169,8 +164,9 @@ class UpdateService {
     final shouldCloseClient = _client == null;
     try {
       final uri = Uri.parse(cardTroveUpdateManifestUrl);
-      final response =
-          await client.get(uri).timeout(const Duration(seconds: 12));
+      final response = await client
+          .get(uri)
+          .timeout(const Duration(seconds: 12));
       if (response.statusCode != 200) {
         throw UpdateCheckException(
           'The update server returned ${response.statusCode}.',
@@ -248,8 +244,9 @@ class UpdateService {
   static int _compareVersions(String a, String b) {
     final aParts = _versionParts(a);
     final bParts = _versionParts(b);
-    final maxLength =
-        aParts.length > bParts.length ? aParts.length : bParts.length;
+    final maxLength = aParts.length > bParts.length
+        ? aParts.length
+        : bParts.length;
 
     for (var i = 0; i < maxLength; i++) {
       final aPart = i < aParts.length ? aParts[i] : 0;

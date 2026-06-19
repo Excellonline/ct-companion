@@ -32,14 +32,13 @@ class LiveShareService {
       .snapshots()
       .map((s) => s.docs.map(LiveShareBoard.fromFirestore).toList());
 
-  Stream<LiveShareBoard?> boardStream(String boardId) =>
-      _boardsCol.doc(boardId).snapshots().map(
-            (doc) => doc.exists ? LiveShareBoard.fromFirestore(doc) : null,
-          );
+  Stream<LiveShareBoard?> boardStream(String boardId) => _boardsCol
+      .doc(boardId)
+      .snapshots()
+      .map((doc) => doc.exists ? LiveShareBoard.fromFirestore(doc) : null);
 
-  Stream<List<LiveShareStroke>> strokesStream(String boardId) => _strokesCol(
-        boardId,
-      )
+  Stream<List<LiveShareStroke>> strokesStream(String boardId) =>
+      _strokesCol(boardId)
           .orderBy('createdAt')
           .snapshots()
           .map((s) => s.docs.map(LiveShareStroke.fromFirestore).toList());
@@ -110,10 +109,9 @@ class LiveShareService {
   String newStrokeId(String boardId) => _strokesCol(boardId).doc().id;
 
   Future<void> upsertStroke(String boardId, LiveShareStroke stroke) async {
-    await _strokesCol(boardId).doc(stroke.id).set(
-          stroke.toFirestore(),
-          SetOptions(merge: true),
-        );
+    await _strokesCol(
+      boardId,
+    ).doc(stroke.id).set(stroke.toFirestore(), SetOptions(merge: true));
     final actor = _team.currentActor();
     await _boardsCol.doc(boardId).set({
       ...actor.updatedAuditFields(),
@@ -131,14 +129,10 @@ class LiveShareService {
     for (final doc in strokes.docs) {
       batch.delete(doc.reference);
     }
-    batch.set(
-      _boardsCol.doc(boardId),
-      {
-        ..._team.currentActor().updatedAuditFields(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      },
-      SetOptions(merge: true),
-    );
+    batch.set(_boardsCol.doc(boardId), {
+      ..._team.currentActor().updatedAuditFields(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
     await batch.commit();
   }
 
@@ -149,8 +143,9 @@ class LiveShareService {
     final prepared = ImageDataService.prepareForRealtime(renderedBytes);
     final now = DateTime.now();
     final noteId = _uuid.v4();
-    final title =
-        board.title.trim().isEmpty ? 'Live Share markup' : board.title;
+    final title = board.title.trim().isEmpty
+        ? 'Live Share markup'
+        : board.title;
     final note = Note(
       id: noteId,
       title: title,

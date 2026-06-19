@@ -21,10 +21,10 @@ class QuickListService {
 
   QuickListService(this.kind);
 
-  CollectionReference<Map<String, dynamic>> get _col =>
-      _db.collection('workspaces').doc(cardTroveWorkspaceId).collection(
-            kind.collection,
-          );
+  CollectionReference<Map<String, dynamic>> get _col => _db
+      .collection('workspaces')
+      .doc(cardTroveWorkspaceId)
+      .collection(kind.collection);
 
   Stream<List<QuickItem>> stream() => _col
       .orderBy('createdAt')

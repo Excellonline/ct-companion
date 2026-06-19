@@ -36,9 +36,9 @@ class FolderFilterBar extends ConsumerWidget {
                   child: ChoiceChip(
                     label: Text(f.name),
                     selected: selected == f.id,
-                    onSelected: (_) => ref
-                        .read(folderFilterProvider.notifier)
-                        .state = selected == f.id ? null : f.id,
+                    onSelected: (_) =>
+                        ref.read(folderFilterProvider.notifier).state =
+                            selected == f.id ? null : f.id,
                   ),
                 ),
             ],

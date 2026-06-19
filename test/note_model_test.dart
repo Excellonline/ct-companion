@@ -80,7 +80,9 @@ void main() {
       expect(m['createdAt'], isA<Timestamp>());
       expect(m['updatedAt'], isA<Timestamp>());
       expect(
-          (m['reminderAt'] as Timestamp).toDate(), DateTime(2026, 5, 10, 9, 0));
+        (m['reminderAt'] as Timestamp).toDate(),
+        DateTime(2026, 5, 10, 9, 0),
+      );
     });
 
     test('null reminderAt stays null', () {

@@ -22,9 +22,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
       if (mounted) setState(() => _json = json);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Export failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Export failed: $e')));
       }
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -36,9 +36,9 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
     if (json == null) return;
     await Clipboard.setData(ClipboardData(text: json));
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Backup JSON copied')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Backup JSON copied')));
     }
   }
 

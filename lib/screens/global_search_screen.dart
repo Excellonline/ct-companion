@@ -35,7 +35,7 @@ class _GlobalSearchScreenState extends ConsumerState<GlobalSearchScreen> {
     final threads = ref.watch(chatThreadsProvider).valueOrNull ?? const [];
     final todos =
         ref.watch(quickListItemsProvider(QuickListKind.todo)).valueOrNull ??
-            const [];
+        const [];
     final q = _query.text.trim().toLowerCase();
 
     final results = <_SearchResult>[];
@@ -48,61 +48,72 @@ class _GlobalSearchScreenState extends ConsumerState<GlobalSearchScreen> {
           ...note.tags,
           ...note.items.map((i) => i.text),
         ], q)) {
-          results.add(_SearchResult(
-            icon: note.inPipeline ? Icons.timeline : Icons.notes,
-            type: note.inInbox ? 'Idea' : 'Note',
-            title: note.title.isEmpty ? '(untitled)' : note.title,
-            subtitle: note.body,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => EditorScreen(note: note)),
+          results.add(
+            _SearchResult(
+              icon: note.inPipeline ? Icons.timeline : Icons.notes,
+              type: note.inInbox ? 'Idea' : 'Note',
+              title: note.title.isEmpty ? '(untitled)' : note.title,
+              subtitle: note.body,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => EditorScreen(note: note)),
+              ),
             ),
-          ));
+          );
         }
       }
       for (final todo in todos) {
         if (_matches([todo.text], q)) {
-          results.add(_SearchResult(
-            icon: todo.done ? Icons.task_alt : Icons.radio_button_unchecked,
-            type: 'To-Do',
-            title: todo.text,
-            subtitle: todo.done ? 'Completed' : 'Open',
-          ));
+          results.add(
+            _SearchResult(
+              icon: todo.done ? Icons.task_alt : Icons.radio_button_unchecked,
+              type: 'To-Do',
+              title: todo.text,
+              subtitle: todo.done ? 'Completed' : 'Open',
+            ),
+          );
         }
       }
       for (final file in files) {
         if (_matches([file.name, file.createdByName], q)) {
-          results.add(_SearchResult(
-            icon: Icons.attach_file,
-            type: file.kind.label,
-            title: file.name,
-            subtitle: file.createdByName,
-            onTap: () => _openUrl(file.url),
-          ));
+          results.add(
+            _SearchResult(
+              icon: Icons.attach_file,
+              type: file.kind.label,
+              title: file.name,
+              subtitle: file.createdByName,
+              onTap: () => _openUrl(file.url),
+            ),
+          );
         }
       }
       for (final decision in decisions) {
         if (_matches([decision.title, decision.rationale], q)) {
-          results.add(_SearchResult(
-            icon: Icons.fact_check_outlined,
-            type: 'Decision',
-            title: decision.title,
-            subtitle: decision.rationale,
-          ));
+          results.add(
+            _SearchResult(
+              icon: Icons.fact_check_outlined,
+              type: 'Decision',
+              title: decision.title,
+              subtitle: decision.rationale,
+            ),
+          );
         }
       }
       for (final thread in threads) {
         if (_matches([thread.title, thread.lastMessagePreview], q)) {
-          results.add(_SearchResult(
-            icon: Icons.forum_outlined,
-            type: 'Chat',
-            title: thread.title,
-            subtitle: thread.lastMessagePreview,
-            onTap: () {
-              ref.read(selectedChatThreadIdProvider.notifier).state = thread.id;
-              Navigator.pop(context);
-            },
-          ));
+          results.add(
+            _SearchResult(
+              icon: Icons.forum_outlined,
+              type: 'Chat',
+              title: thread.title,
+              subtitle: thread.lastMessagePreview,
+              onTap: () {
+                ref.read(selectedChatThreadIdProvider.notifier).state =
+                    thread.id;
+                Navigator.pop(context);
+              },
+            ),
+          );
         }
       }
     }
@@ -136,14 +147,14 @@ class _GlobalSearchScreenState extends ConsumerState<GlobalSearchScreen> {
             child: q.isEmpty
                 ? const _SearchPrompt()
                 : results.isEmpty
-                    ? const Center(child: Text('No results'))
-                    : ListView.separated(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: results.length,
-                        separatorBuilder: (_, __) => const Divider(height: 1),
-                        itemBuilder: (context, index) =>
-                            _ResultTile(result: results[index]),
-                      ),
+                ? const Center(child: Text('No results'))
+                : ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: results.length,
+                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    itemBuilder: (context, index) =>
+                        _ResultTile(result: results[index]),
+                  ),
           ),
         ],
       ),

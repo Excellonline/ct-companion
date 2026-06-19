@@ -5,11 +5,14 @@ import '../services/comments_service.dart';
 import 'auth_provider.dart';
 import 'team_provider.dart';
 
-final commentsServiceProvider =
-    Provider<CommentsService>((ref) => CommentsService());
+final commentsServiceProvider = Provider<CommentsService>(
+  (ref) => CommentsService(),
+);
 
-final noteCommentsProvider =
-    StreamProvider.family<List<NoteComment>, String>((ref, noteId) {
+final noteCommentsProvider = StreamProvider.family<List<NoteComment>, String>((
+  ref,
+  noteId,
+) {
   final user = ref.watch(authStateProvider).valueOrNull;
   if (user == null || noteId.isEmpty) {
     return Stream<List<NoteComment>>.value(const []);

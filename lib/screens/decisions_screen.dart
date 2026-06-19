@@ -56,10 +56,9 @@ class DecisionsScreen extends ConsumerWidget {
       ),
     );
     if (result != true || titleText.trim().isEmpty) return;
-    await ref.read(decisionsServiceProvider).createDecision(
-          title: titleText,
-          rationale: rationaleText,
-        );
+    await ref
+        .read(decisionsServiceProvider)
+        .createDecision(title: titleText, rationale: rationaleText);
   }
 
   @override
@@ -80,13 +79,15 @@ class DecisionsScreen extends ConsumerWidget {
                 ),
                 const Spacer(),
                 IconButton(
-                  icon: Icon(includeArchived
-                      ? Icons.inventory_2
-                      : Icons.inventory_2_outlined),
+                  icon: Icon(
+                    includeArchived
+                        ? Icons.inventory_2
+                        : Icons.inventory_2_outlined,
+                  ),
                   tooltip: includeArchived ? 'Hide archived' : 'Show archived',
-                  onPressed: () => ref
-                      .read(showArchivedDecisionsProvider.notifier)
-                      .state = !includeArchived,
+                  onPressed: () =>
+                      ref.read(showArchivedDecisionsProvider.notifier).state =
+                          !includeArchived,
                 ),
                 FilledButton.icon(
                   icon: const Icon(Icons.fact_check_outlined),
@@ -122,13 +123,13 @@ class DecisionsScreen extends ConsumerWidget {
         title: const Text('Decisions'),
         actions: [
           IconButton(
-            icon: Icon(includeArchived
-                ? Icons.inventory_2
-                : Icons.inventory_2_outlined),
+            icon: Icon(
+              includeArchived ? Icons.inventory_2 : Icons.inventory_2_outlined,
+            ),
             tooltip: includeArchived ? 'Hide archived' : 'Show archived',
-            onPressed: () => ref
-                .read(showArchivedDecisionsProvider.notifier)
-                .state = !includeArchived,
+            onPressed: () =>
+                ref.read(showArchivedDecisionsProvider.notifier).state =
+                    !includeArchived,
           ),
         ],
       ),
@@ -146,10 +147,7 @@ class _DecisionTile extends ConsumerWidget {
   final Decision decision;
   final bool isAdmin;
 
-  const _DecisionTile({
-    required this.decision,
-    required this.isAdmin,
-  });
+  const _DecisionTile({required this.decision, required this.isAdmin});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -167,8 +165,11 @@ class _DecisionTile extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (decision.rationale.isNotEmpty)
-              Text(decision.rationale,
-                  maxLines: 4, overflow: TextOverflow.ellipsis),
+              Text(
+                decision.rationale,
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+              ),
             const SizedBox(height: 4),
             Text(
               '${decision.createdByName} | ${DateFormat.MMMd().add_jm().format(decision.createdAt)}',
@@ -179,15 +180,18 @@ class _DecisionTile extends ConsumerWidget {
         isThreeLine: decision.rationale.isNotEmpty,
         trailing: isAdmin
             ? IconButton(
-                icon: Icon(decision.isArchived
-                    ? Icons.unarchive_outlined
-                    : Icons.archive_outlined),
+                icon: Icon(
+                  decision.isArchived
+                      ? Icons.unarchive_outlined
+                      : Icons.archive_outlined,
+                ),
                 tooltip: decision.isArchived ? 'Restore' : 'Archive',
-                onPressed: () =>
-                    ref.read(decisionsServiceProvider).archiveDecision(
-                          decision.id,
-                          archived: !decision.isArchived,
-                        ),
+                onPressed: () => ref
+                    .read(decisionsServiceProvider)
+                    .archiveDecision(
+                      decision.id,
+                      archived: !decision.isArchived,
+                    ),
               )
             : null,
       ),
@@ -209,8 +213,10 @@ class _EmptyDecisions extends StatelessWidget {
           const SizedBox(height: 16),
           const Text('No decisions recorded'),
           const SizedBox(height: 4),
-          Text('Save important calls so the team keeps context',
-              style: TextStyle(color: hint)),
+          Text(
+            'Save important calls so the team keeps context',
+            style: TextStyle(color: hint),
+          ),
         ],
       ),
     );

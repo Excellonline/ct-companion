@@ -16,20 +16,20 @@ class ChatAttachment {
   });
 
   factory ChatAttachment.fromMap(Map<String, dynamic> map) => ChatAttachment(
-        name: map['name'] as String? ?? 'Attachment',
-        url: map['url'] as String? ?? '',
-        storagePath: map['storagePath'] as String? ?? '',
-        sizeBytes: map['sizeBytes'] as int? ?? 0,
-        contentType: map['contentType'] as String?,
-      );
+    name: map['name'] as String? ?? 'Attachment',
+    url: map['url'] as String? ?? '',
+    storagePath: map['storagePath'] as String? ?? '',
+    sizeBytes: map['sizeBytes'] as int? ?? 0,
+    contentType: map['contentType'] as String?,
+  );
 
   Map<String, dynamic> toMap() => {
-        'name': name,
-        'url': url,
-        'storagePath': storagePath,
-        'sizeBytes': sizeBytes,
-        'contentType': contentType,
-      };
+    'name': name,
+    'url': url,
+    'storagePath': storagePath,
+    'sizeBytes': sizeBytes,
+    'contentType': contentType,
+  };
 }
 
 class ChatReplyReference {
@@ -51,30 +51,24 @@ class ChatReplyReference {
       );
 
   Map<String, dynamic> toMap() => {
-        'messageId': messageId,
-        'senderName': senderName,
-        'text': text,
-      };
+    'messageId': messageId,
+    'senderName': senderName,
+    'text': text,
+  };
 }
 
 class ChatReaction {
   final String type;
   final String displayName;
 
-  ChatReaction({
-    required this.type,
-    required this.displayName,
-  });
+  ChatReaction({required this.type, required this.displayName});
 
   factory ChatReaction.fromMap(Map<String, dynamic> map) => ChatReaction(
-        type: map['type'] as String? ?? '',
-        displayName: map['displayName'] as String? ?? 'Team member',
-      );
+    type: map['type'] as String? ?? '',
+    displayName: map['displayName'] as String? ?? 'Team member',
+  );
 
-  Map<String, dynamic> toMap() => {
-        'type': type,
-        'displayName': displayName,
-      };
+  Map<String, dynamic> toMap() => {'type': type, 'displayName': displayName};
 }
 
 class ChatMessage {
@@ -123,9 +117,9 @@ class ChatMessage {
       senderName: data['senderName'] as String? ?? 'Team member',
       senderEmail: data['senderEmail'] as String? ?? '',
       attachments: ((data['attachments'] as List?) ?? const [])
-          .map((e) => ChatAttachment.fromMap(Map<String, dynamic>.from(
-                e as Map,
-              )))
+          .map(
+            (e) => ChatAttachment.fromMap(Map<String, dynamic>.from(e as Map)),
+          )
           .toList(),
       replyTo: replyData is Map
           ? ChatReplyReference.fromMap(Map<String, dynamic>.from(replyData))
@@ -136,7 +130,9 @@ class ChatMessage {
           value is Map
               ? ChatReaction.fromMap(Map<String, dynamic>.from(value))
               : ChatReaction(
-                  type: value.toString(), displayName: 'Team member'),
+                  type: value.toString(),
+                  displayName: 'Team member',
+                ),
         ),
       ),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),

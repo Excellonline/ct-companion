@@ -39,8 +39,8 @@ class TeamScreen extends ConsumerWidget {
                     child: Text(
                       'Members',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   if (pending > 0)
@@ -79,11 +79,7 @@ class TeamScreen extends ConsumerWidget {
 }
 
 int _sortMembers(TeamMember a, TeamMember b) {
-  final rank = {
-    TeamRole.pending: 0,
-    TeamRole.admin: 1,
-    TeamRole.member: 2,
-  };
+  final rank = {TeamRole.pending: 0, TeamRole.admin: 1, TeamRole.member: 2};
   final roleCompare = rank[a.role]!.compareTo(rank[b.role]!);
   if (roleCompare != 0) return roleCompare;
   return a.label.toLowerCase().compareTo(b.label.toLowerCase());
@@ -153,16 +149,16 @@ class _Metric extends StatelessWidget {
           Text(
             label.toUpperCase(),
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: Theme.of(context).hintColor,
-                  letterSpacing: 0.7,
-                ),
+              color: Theme.of(context).hintColor,
+              letterSpacing: 0.7,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
           ),
         ],
       ),
@@ -229,8 +225,8 @@ class _MemberRow extends ConsumerWidget {
       () => isSelf
           ? ref.read(teamServiceProvider).updateCurrentUserDisplayName(result)
           : ref
-              .read(teamServiceProvider)
-              .updateMemberDisplayName(member.uid, result),
+                .read(teamServiceProvider)
+                .updateMemberDisplayName(member.uid, result),
       'Member updated.',
     );
   }
@@ -286,8 +282,8 @@ class _MemberRow extends ConsumerWidget {
     final icon = member.isAdmin
         ? Icons.admin_panel_settings_outlined
         : member.isPending
-            ? Icons.person_add_alt_1_outlined
-            : Icons.person_outline;
+        ? Icons.person_add_alt_1_outlined
+        : Icons.person_outline;
 
     return Card(
       child: Padding(
@@ -302,8 +298,9 @@ class _MemberRow extends ConsumerWidget {
                   backgroundColor: member.isPending
                       ? scheme.tertiary.withValues(alpha: 0.14)
                       : scheme.primary.withValues(alpha: 0.13),
-                  foregroundColor:
-                      member.isPending ? scheme.tertiary : scheme.primary,
+                  foregroundColor: member.isPending
+                      ? scheme.tertiary
+                      : scheme.primary,
                   child: Icon(icon),
                 ),
                 const SizedBox(width: 12),
@@ -316,9 +313,7 @@ class _MemberRow extends ConsumerWidget {
                           Flexible(
                             child: Text(
                               member.label,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
+                              style: Theme.of(context).textTheme.titleMedium
                                   ?.copyWith(fontWeight: FontWeight.w700),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -403,8 +398,9 @@ class _MemberRow extends ConsumerWidget {
                   ),
                   IconButton.filledTonal(
                     tooltip: isSelf ? 'You cannot remove yourself' : 'Remove',
-                    onPressed:
-                        isSelf ? null : () => _removeMember(context, ref),
+                    onPressed: isSelf
+                        ? null
+                        : () => _removeMember(context, ref),
                     icon: const Icon(Icons.person_remove_outlined),
                   ),
                 ],

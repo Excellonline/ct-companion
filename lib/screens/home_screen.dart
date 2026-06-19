@@ -211,9 +211,7 @@ Action items:
                     _isDesktop && activeSpec == _TabSpec.pipeline,
                 onNewNote: _newPipelineNote,
               ),
-              actions: [
-                _isDesktop ? _appBarActions() : _mobileAppBarActions(),
-              ],
+              actions: [_isDesktop ? _appBarActions() : _mobileAppBarActions()],
             ),
             body: _isDesktop ? _desktopBody() : _tabBody(),
             bottomNavigationBar: _isDesktop
@@ -241,9 +239,7 @@ Action items:
   Widget _tabBody() {
     return TabBarView(
       controller: _tabs,
-      children: [
-        for (final s in _tabSpecs) _buildBody(s),
-      ],
+      children: [for (final s in _tabSpecs) _buildBody(s)],
     );
   }
 
@@ -269,9 +265,7 @@ Action items:
           child: TabBarView(
             controller: _tabs,
             physics: const NeverScrollableScrollPhysics(),
-            children: [
-              for (final s in _tabSpecs) _buildBody(s),
-            ],
+            children: [for (final s in _tabSpecs) _buildBody(s)],
           ),
         ),
       ],
@@ -692,9 +686,7 @@ class _NotesTabState extends ConsumerState<_NotesTab> {
                           direction: DismissDirection.endToStart,
                           background: Container(
                             alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
                             decoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.primary,
                               borderRadius: BorderRadius.circular(12),
@@ -743,8 +735,10 @@ class _NotesTabState extends ConsumerState<_NotesTab> {
             error: (e, _) => Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text('Failed to load notes:\n$e',
-                    textAlign: TextAlign.center),
+                child: Text(
+                  'Failed to load notes:\n$e',
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

@@ -87,7 +87,8 @@ final filteredNotesProvider = Provider<List<Note>>((ref) {
         list = list.where((n) => n.folderId == folder).toList();
       }
       list = SearchService.filter(list, query);
-      list = [...list]..sort((a, b) {
+      list = [...list]
+        ..sort((a, b) {
           if (a.pinned && !b.pinned) return -1;
           if (!a.pinned && b.pinned) return 1;
           switch (sort) {

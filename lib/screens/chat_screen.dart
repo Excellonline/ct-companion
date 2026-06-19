@@ -33,16 +33,14 @@ class ChatScreen extends ConsumerWidget {
             : _MessagesPane(threadId: effectiveId);
 
         if (size.width < 600) {
-          final threadPaneHeight =
-              (size.height * 0.28).clamp(136.0, 188.0).toDouble();
+          final threadPaneHeight = (size.height * 0.28)
+              .clamp(136.0, 188.0)
+              .toDouble();
           return Column(
             children: [
               SizedBox(
                 height: threadPaneHeight,
-                child: _ThreadsPane(
-                  threads: threads,
-                  selectedId: effectiveId,
-                ),
+                child: _ThreadsPane(threads: threads, selectedId: effectiveId),
               ),
               const Divider(height: 1),
               Expanded(child: messagesPane),
@@ -54,10 +52,7 @@ class ChatScreen extends ConsumerWidget {
           children: [
             SizedBox(
               width: size.width < 720 ? 210 : 300,
-              child: _ThreadsPane(
-                threads: threads,
-                selectedId: effectiveId,
-              ),
+              child: _ThreadsPane(threads: threads, selectedId: effectiveId),
             ),
             const VerticalDivider(width: 1),
             Expanded(child: messagesPane),
@@ -79,10 +74,7 @@ class _ThreadsPane extends ConsumerWidget {
   final List<ChatThread> threads;
   final String? selectedId;
 
-  const _ThreadsPane({
-    required this.threads,
-    required this.selectedId,
-  });
+  const _ThreadsPane({required this.threads, required this.selectedId});
 
   Future<void> _createTopic(BuildContext context, WidgetRef ref) async {
     var topicName = '';
@@ -126,8 +118,9 @@ class _ThreadsPane extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text('Delete "${thread.title}"?'),
-        content:
-            const Text('The topic and its visible messages will be removed.'),
+        content: const Text(
+          'The topic and its visible messages will be removed.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -276,7 +269,9 @@ class _MessagesPaneState extends ConsumerState<_MessagesPane> {
     if (_text.text.trim().isEmpty && _files.isEmpty) return;
     setState(() => _sending = true);
     try {
-      await ref.read(chatServiceProvider).sendMessage(
+      await ref
+          .read(chatServiceProvider)
+          .sendMessage(
             threadId: widget.threadId,
             text: _text.text,
             files: _files,
@@ -290,9 +285,9 @@ class _MessagesPaneState extends ConsumerState<_MessagesPane> {
       _focus.requestFocus();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Message failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Message failed: $e')));
       }
     } finally {
       if (mounted) setState(() => _sending = false);
@@ -360,10 +355,7 @@ class _MessagesPaneState extends ConsumerState<_MessagesPane> {
                     for (final file in _files)
                       InputChip(
                         avatar: const Icon(Icons.attach_file, size: 16),
-                        label: Text(
-                          file.name,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                        label: Text(file.name, overflow: TextOverflow.ellipsis),
                         onDeleted: () => setState(
                           () =>
                               _files = _files.where((f) => f != file).toList(),
@@ -429,16 +421,18 @@ class _MessagesPaneState extends ConsumerState<_MessagesPane> {
 
   Future<void> _toggleReaction(ChatMessage message, String reaction) async {
     try {
-      await ref.read(chatServiceProvider).toggleMessageReaction(
+      await ref
+          .read(chatServiceProvider)
+          .toggleMessageReaction(
             threadId: widget.threadId,
             messageId: message.id,
             reaction: reaction,
           );
     } catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Reaction failed: $error')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Reaction failed: $error')));
     }
   }
 }
@@ -480,10 +474,9 @@ class _MessageBubble extends StatelessWidget {
                     Expanded(
                       child: Text(
                         message.senderName,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge
-                            ?.copyWith(fontWeight: FontWeight.w700),
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -570,10 +563,7 @@ class _ReplyComposerPreview extends StatelessWidget {
   final ChatMessage message;
   final VoidCallback onCancel;
 
-  const _ReplyComposerPreview({
-    required this.message,
-    required this.onCancel,
-  });
+  const _ReplyComposerPreview({required this.message, required this.onCancel});
 
   @override
   Widget build(BuildContext context) {
@@ -596,10 +586,9 @@ class _ReplyComposerPreview extends StatelessWidget {
               children: [
                 Text(
                   'Replying to ${message.senderName}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
@@ -644,10 +633,9 @@ class _ReplyReferenceCard extends StatelessWidget {
         children: [
           Text(
             reply.senderName,
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.copyWith(fontWeight: FontWeight.w700),
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 2),
@@ -741,8 +729,10 @@ class _EmptyChat extends StatelessWidget {
           const SizedBox(height: 16),
           const Text('No messages yet'),
           const SizedBox(height: 4),
-          Text('Start a topic or send an update',
-              style: TextStyle(color: hint)),
+          Text(
+            'Start a topic or send an update',
+            style: TextStyle(color: hint),
+          ),
         ],
       ),
     );

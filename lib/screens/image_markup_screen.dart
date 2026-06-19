@@ -8,10 +8,7 @@ class MarkedUpImage {
   final Uint8List bytes;
   final String name;
 
-  const MarkedUpImage({
-    required this.bytes,
-    required this.name,
-  });
+  const MarkedUpImage({required this.bytes, required this.name});
 }
 
 class ImageMarkupScreen extends StatefulWidget {
@@ -51,11 +48,7 @@ class _ImageMarkupScreenState extends State<ImageMarkupScreen> {
   void _startStroke(Offset point) {
     setState(() {
       _strokes.add(
-        _MarkupStroke(
-          color: _color,
-          width: _strokeWidth,
-          points: [point],
-        ),
+        _MarkupStroke(color: _color, width: _strokeWidth, points: [point]),
       );
     });
   }
@@ -72,8 +65,9 @@ class _ImageMarkupScreenState extends State<ImageMarkupScreen> {
     setState(() => _saving = true);
     try {
       await WidgetsBinding.instance.endOfFrame;
-      final boundary = _captureKey.currentContext?.findRenderObject()
-          as RenderRepaintBoundary?;
+      final boundary =
+          _captureKey.currentContext?.findRenderObject()
+              as RenderRepaintBoundary?;
       if (boundary == null) {
         throw StateError('Could not capture the marked-up image.');
       }
@@ -85,16 +79,13 @@ class _ImageMarkupScreenState extends State<ImageMarkupScreen> {
       }
       if (!mounted) return;
       Navigator.of(context).pop(
-        MarkedUpImage(
-          bytes: bytes,
-          name: _markedFileName(widget.fileName),
-        ),
+        MarkedUpImage(bytes: bytes, name: _markedFileName(widget.fileName)),
       );
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Markup failed: $error')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Markup failed: $error')));
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -296,10 +287,7 @@ class _ColorButton extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(3),
             child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               child: const SizedBox(width: 22, height: 22),
             ),
           ),

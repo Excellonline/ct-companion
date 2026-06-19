@@ -97,9 +97,11 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
     _dueAt = n?.dueAt;
     _archivedAt = n?.archivedAt;
     _inInbox = n?.inInbox ?? widget.initialInInbox;
-    _pipelineAddedAt = n?.pipelineAddedAt ??
+    _pipelineAddedAt =
+        n?.pipelineAddedAt ??
         (widget.initialInPipeline ? DateTime.now() : null);
-    _pipelineStage = n?.pipelineStage ??
+    _pipelineStage =
+        n?.pipelineStage ??
         (widget.initialInPipeline ? widget.initialPipelineStage : null);
     _createdAt = n?.createdAt ?? DateTime.now();
 
@@ -147,8 +149,9 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
     if (!_dirty && widget.note != null) return true;
     setState(() => _saving = true);
     try {
-      final cleanedItems =
-          _items.where((i) => i.text.trim().isNotEmpty).toList(growable: false);
+      final cleanedItems = _items
+          .where((i) => i.text.trim().isNotEmpty)
+          .toList(growable: false);
       final attachments = await _persistAttachments();
       final note = Note(
         id: _id,
@@ -184,9 +187,9 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
       return true;
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Save failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Save failed: $e')));
       }
       return false;
     } finally {
@@ -259,9 +262,9 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Delete failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Delete failed: $e')));
       }
     }
   }
@@ -296,9 +299,9 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Archive failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Archive failed: $e')));
       }
     }
   }
@@ -372,15 +375,13 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
   void _toggleType() {
     setState(() {
       if (_type == NoteType.note) {
-        final lines =
-            _body.text.split('\n').where((l) => l.trim().isNotEmpty).toList();
+        final lines = _body.text
+            .split('\n')
+            .where((l) => l.trim().isNotEmpty)
+            .toList();
         _items = lines
             .map(
-              (l) => ChecklistItem(
-                id: _uuid.v4(),
-                text: l.trim(),
-                done: false,
-              ),
+              (l) => ChecklistItem(id: _uuid.v4(), text: l.trim(), done: false),
             )
             .toList();
         if (_items.isEmpty) {
@@ -389,8 +390,10 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
         }
         _type = NoteType.checklist;
       } else {
-        _body.text =
-            _items.map((i) => i.text).where((t) => t.isNotEmpty).join('\n');
+        _body.text = _items
+            .map((i) => i.text)
+            .where((t) => t.isNotEmpty)
+            .join('\n');
         _items = const [];
         _type = NoteType.note;
       }
@@ -449,10 +452,8 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
     if (!mounted) return;
     final result = await Navigator.of(context).push<MarkedUpImage>(
       MaterialPageRoute(
-        builder: (_) => ImageMarkupScreen(
-          imageBytes: bytes,
-          fileName: attachment.name,
-        ),
+        builder: (_) =>
+            ImageMarkupScreen(imageBytes: bytes, fileName: attachment.name),
       ),
     );
     if (result == null) return;
@@ -522,12 +523,12 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
     final isAdmin = ref.watch(isAdminProvider);
     final safeFolderId =
         (_folderId != null && folders.any((f) => f.id == _folderId))
-            ? _folderId
-            : null;
+        ? _folderId
+        : null;
     final safeOwnerUid =
         (_ownerUid != null && members.any((m) => m.uid == _ownerUid))
-            ? _ownerUid
-            : null;
+        ? _ownerUid
+        : null;
 
     return PopScope(
       canPop: false,
@@ -566,9 +567,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
               }),
             ),
             IconButton(
-              icon: Icon(
-                _pinned ? Icons.push_pin : Icons.push_pin_outlined,
-              ),
+              icon: Icon(_pinned ? Icons.push_pin : Icons.push_pin_outlined),
               tooltip: _pinned ? 'Unpin' : 'Pin',
               onPressed: () => setState(() {
                 _pinned = !_pinned;
@@ -718,10 +717,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
                     ButtonSegment(
                       value: priority,
                       label: Text(priority.label),
-                      icon: Icon(
-                        Icons.flag,
-                        color: _priorityColor(priority),
-                      ),
+                      icon: Icon(Icons.flag, color: _priorityColor(priority)),
                     ),
                 ],
                 selected: {_priority},
@@ -875,8 +871,9 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
                                   Chip(
                                     label: Text(t),
                                     onDeleted: () => setState(() {
-                                      _tags =
-                                          _tags.where((x) => x != t).toList();
+                                      _tags = _tags
+                                          .where((x) => x != t)
+                                          .toList();
                                       _dirty = true;
                                     }),
                                   ),
@@ -903,10 +900,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
               ),
               if (widget.note != null) ...[
                 const Divider(height: 32),
-                _NoteComments(
-                  noteId: _id,
-                  noteTitle: _title.text.trim(),
-                ),
+                _NoteComments(noteId: _id, noteTitle: _title.text.trim()),
               ],
             ],
           ),
@@ -988,10 +982,7 @@ class _NoteAttachmentsEditor extends StatelessWidget {
         if (attachments.isEmpty)
           Padding(
             padding: const EdgeInsets.only(left: 36, top: 4),
-            child: Text(
-              'No images attached',
-              style: TextStyle(color: hint),
-            ),
+            child: Text('No images attached', style: TextStyle(color: hint)),
           )
         else ...[
           const SizedBox(height: 10),
@@ -1083,10 +1074,9 @@ class _NoteAttachmentTile extends StatelessWidget {
           ),
           Text(
             _formatBytes(attachment.sizeBytes),
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall
-                ?.copyWith(color: Theme.of(context).hintColor),
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).hintColor,
+            ),
           ),
         ],
       ),
@@ -1210,18 +1200,17 @@ class _EditableNoteAttachment {
     required String name,
     required Uint8List bytes,
     required String contentType,
-  }) =>
-      _EditableNoteAttachment(
-        id: id,
-        name: name,
-        url: null,
-        storagePath: null,
-        dataBase64: null,
-        sizeBytes: bytes.length,
-        contentType: contentType,
-        createdAt: DateTime.now(),
-        pendingBytes: bytes,
-      );
+  }) => _EditableNoteAttachment(
+    id: id,
+    name: name,
+    url: null,
+    storagePath: null,
+    dataBase64: null,
+    sizeBytes: bytes.length,
+    contentType: contentType,
+    createdAt: DateTime.now(),
+    pendingBytes: bytes,
+  );
 
   bool get isImage {
     final type = contentType?.toLowerCase() ?? '';
@@ -1235,29 +1224,28 @@ class _EditableNoteAttachment {
     String? contentType,
     Uint8List? pendingBytes,
     String? dataBase64,
-  }) =>
-      _EditableNoteAttachment(
-        id: id,
-        name: name ?? this.name,
-        url: url,
-        storagePath: storagePath,
-        dataBase64: dataBase64 ?? this.dataBase64,
-        sizeBytes: sizeBytes ?? this.sizeBytes,
-        contentType: contentType ?? this.contentType,
-        createdAt: createdAt,
-        pendingBytes: pendingBytes ?? this.pendingBytes,
-      );
+  }) => _EditableNoteAttachment(
+    id: id,
+    name: name ?? this.name,
+    url: url,
+    storagePath: storagePath,
+    dataBase64: dataBase64 ?? this.dataBase64,
+    sizeBytes: sizeBytes ?? this.sizeBytes,
+    contentType: contentType ?? this.contentType,
+    createdAt: createdAt,
+    pendingBytes: pendingBytes ?? this.pendingBytes,
+  );
 
   NoteAttachment toAttachment() => NoteAttachment(
-        id: id,
-        name: name,
-        url: url ?? '',
-        storagePath: storagePath ?? '',
-        dataBase64: dataBase64,
-        sizeBytes: sizeBytes,
-        contentType: contentType,
-        createdAt: createdAt,
-      );
+    id: id,
+    name: name,
+    url: url ?? '',
+    storagePath: storagePath ?? '',
+    dataBase64: dataBase64,
+    sizeBytes: sizeBytes,
+    contentType: contentType,
+    createdAt: createdAt,
+  );
 }
 
 String _contentTypeForImageName(String name) {
@@ -1292,10 +1280,7 @@ class _NoteComments extends ConsumerStatefulWidget {
   final String noteId;
   final String noteTitle;
 
-  const _NoteComments({
-    required this.noteId,
-    required this.noteTitle,
-  });
+  const _NoteComments({required this.noteId, required this.noteTitle});
 
   @override
   ConsumerState<_NoteComments> createState() => _NoteCommentsState();
@@ -1315,7 +1300,9 @@ class _NoteCommentsState extends ConsumerState<_NoteComments> {
     if (_posting || _comment.text.trim().isEmpty) return;
     setState(() => _posting = true);
     try {
-      await ref.read(commentsServiceProvider).addComment(
+      await ref
+          .read(commentsServiceProvider)
+          .addComment(
             noteId: widget.noteId,
             noteTitle: widget.noteTitle,
             text: _comment.text,
@@ -1323,9 +1310,9 @@ class _NoteCommentsState extends ConsumerState<_NoteComments> {
       _comment.clear();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Comment failed: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Comment failed: $e')));
       }
     } finally {
       if (mounted) setState(() => _posting = false);
@@ -1345,10 +1332,7 @@ class _NoteCommentsState extends ConsumerState<_NoteComments> {
           children: [
             const Icon(Icons.mode_comment_outlined),
             const SizedBox(width: 12),
-            Text(
-              'Discussion',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('Discussion', style: Theme.of(context).textTheme.titleMedium),
           ],
         ),
         const SizedBox(height: 12),
@@ -1372,9 +1356,9 @@ class _NoteCommentsState extends ConsumerState<_NoteComments> {
                               ),
                             ),
                             Text(
-                              DateFormat.MMMd()
-                                  .add_jm()
-                                  .format(comment.createdAt),
+                              DateFormat.MMMd().add_jm().format(
+                                comment.createdAt,
+                              ),
                               style: TextStyle(fontSize: 11, color: hint),
                             ),
                           ],
@@ -1386,10 +1370,7 @@ class _NoteCommentsState extends ConsumerState<_NoteComments> {
                                 tooltip: 'Delete comment',
                                 onPressed: () => ref
                                     .read(commentsServiceProvider)
-                                    .deleteComment(
-                                      widget.noteId,
-                                      comment.id,
-                                    ),
+                                    .deleteComment(widget.noteId, comment.id),
                               )
                             : null,
                       ),

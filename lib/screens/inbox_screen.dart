@@ -15,14 +15,14 @@ class InboxScreen extends ConsumerWidget {
     final notesAsync = ref.watch(notesStreamProvider);
     final inbox = ref.watch(inboxNotesProvider);
     void newIdea() => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const EditorScreen(
-              initialType: NoteType.note,
-              initialInInbox: true,
-            ),
-          ),
-        );
+      context,
+      MaterialPageRoute(
+        builder: (_) => const EditorScreen(
+          initialType: NoteType.note,
+          initialInInbox: true,
+        ),
+      ),
+    );
 
     final body = notesAsync.when(
       data: (_) => inbox.isEmpty
@@ -104,8 +104,10 @@ class _EmptyInbox extends StatelessWidget {
           const SizedBox(height: 16),
           const Text('No inbox ideas'),
           const SizedBox(height: 4),
-          Text('Capture rough ideas before they become pipeline work',
-              style: TextStyle(color: hint)),
+          Text(
+            'Capture rough ideas before they become pipeline work',
+            style: TextStyle(color: hint),
+          ),
           const SizedBox(height: 16),
           FilledButton.icon(
             icon: const Icon(Icons.lightbulb_outline),

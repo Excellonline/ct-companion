@@ -9,8 +9,9 @@ enum SharedFilesFilter { all, docs, files }
 
 final filesServiceProvider = Provider<FilesService>((ref) => FilesService());
 
-final sharedFilesFilterProvider =
-    StateProvider<SharedFilesFilter>((ref) => SharedFilesFilter.all);
+final sharedFilesFilterProvider = StateProvider<SharedFilesFilter>(
+  (ref) => SharedFilesFilter.all,
+);
 
 final sharedFilesProvider = StreamProvider<List<SharedFile>>((ref) {
   final user = ref.watch(authStateProvider).valueOrNull;

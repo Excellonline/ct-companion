@@ -7,13 +7,13 @@ import 'team_provider.dart';
 
 final quickListServiceProvider =
     Provider.family<QuickListService, QuickListKind>(
-  (ref, kind) => QuickListService(kind),
-);
+      (ref, kind) => QuickListService(kind),
+    );
 
 final quickListItemsProvider =
     StreamProvider.family<List<QuickItem>, QuickListKind>((ref, kind) {
-  final user = ref.watch(authStateProvider).valueOrNull;
-  if (user == null) return Stream<List<QuickItem>>.value(const []);
-  ref.watch(memberBootstrapProvider);
-  return ref.watch(quickListServiceProvider(kind)).stream();
-});
+      final user = ref.watch(authStateProvider).valueOrNull;
+      if (user == null) return Stream<List<QuickItem>>.value(const []);
+      ref.watch(memberBootstrapProvider);
+      return ref.watch(quickListServiceProvider(kind)).stream();
+    });

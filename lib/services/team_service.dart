@@ -23,16 +23,16 @@ class TeamActor {
   }
 
   Map<String, dynamic> createdAuditFields() => {
-        'createdByUid': uid,
-        'createdByEmail': email,
-        'createdByName': label,
-      };
+    'createdByUid': uid,
+    'createdByEmail': email,
+    'createdByName': label,
+  };
 
   Map<String, dynamic> updatedAuditFields() => {
-        'updatedByUid': uid,
-        'updatedByEmail': email,
-        'updatedByName': label,
-      };
+    'updatedByUid': uid,
+    'updatedByEmail': email,
+    'updatedByName': label,
+  };
 }
 
 class TeamService {

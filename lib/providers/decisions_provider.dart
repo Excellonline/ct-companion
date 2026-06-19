@@ -5,8 +5,9 @@ import '../services/decisions_service.dart';
 import 'auth_provider.dart';
 import 'team_provider.dart';
 
-final decisionsServiceProvider =
-    Provider<DecisionsService>((ref) => DecisionsService());
+final decisionsServiceProvider = Provider<DecisionsService>(
+  (ref) => DecisionsService(),
+);
 
 final showArchivedDecisionsProvider = StateProvider<bool>((ref) => false);
 

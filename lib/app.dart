@@ -32,9 +32,8 @@ class CardTroveCompanionApp extends ConsumerWidget {
       darkTheme: _buildTheme(Brightness.dark),
       home: auth.when(
         data: (user) => user == null ? const LoginScreen() : const _TeamGate(),
-        loading: () => const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
+        loading: () =>
+            const Scaffold(body: Center(child: CircularProgressIndicator())),
         error: (e, _) => Scaffold(body: Center(child: Text('$e'))),
       ),
     );
@@ -160,9 +159,8 @@ class _TeamGate extends ConsumerWidget {
             }
             return const HomeScreen();
           },
-          loading: () => const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          ),
+          loading: () =>
+              const Scaffold(body: Center(child: CircularProgressIndicator())),
           error: (e, _) => Scaffold(
             body: Center(
               child: Padding(
@@ -173,9 +171,8 @@ class _TeamGate extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, _) => Scaffold(
         body: _WorkspaceAccessScreen(
           title: 'Could not join workspace',

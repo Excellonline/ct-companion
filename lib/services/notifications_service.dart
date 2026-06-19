@@ -70,14 +70,10 @@ class NotificationsService {
         .get();
     final batch = _db.batch();
     for (final doc in unread.docs) {
-      batch.set(
-        doc.reference,
-        {
-          'read': true,
-          'readAt': FieldValue.serverTimestamp(),
-        },
-        SetOptions(merge: true),
-      );
+      batch.set(doc.reference, {
+        'read': true,
+        'readAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     }
     await batch.commit();
   }

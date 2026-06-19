@@ -53,10 +53,8 @@ class _QuickListScreenState extends ConsumerState<QuickListScreen> {
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     itemCount: items.length,
-                    itemBuilder: (ctx, i) => _ItemTile(
-                      item: items[i],
-                      kind: widget.kind,
-                    ),
+                    itemBuilder: (ctx, i) =>
+                        _ItemTile(item: items[i], kind: widget.kind),
                   ),
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (e, _) => Center(
@@ -133,10 +131,7 @@ class _ItemTile extends ConsumerWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 24),
         color: Theme.of(context).colorScheme.error,
-        child: Icon(
-          Icons.delete,
-          color: Theme.of(context).colorScheme.onError,
-        ),
+        child: Icon(Icons.delete, color: Theme.of(context).colorScheme.onError),
       ),
       onDismissed: isAdmin ? (_) => svc.delete(item.id) : null,
       child: ListTile(
@@ -181,10 +176,7 @@ class _Empty extends StatelessWidget {
           const SizedBox(height: 16),
           Text('$label is empty'),
           const SizedBox(height: 4),
-          Text(
-            'Add a task from the box below',
-            style: TextStyle(color: hint),
-          ),
+          Text('Add a task from the box below', style: TextStyle(color: hint)),
         ],
       ),
     );

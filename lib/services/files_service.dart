@@ -89,11 +89,13 @@ class FilesService {
     }
 
     final ref = _storage.ref(storagePath);
-    final metadata = SettableMetadata(customMetadata: {
-      'originalName': file.name,
-      'workspaceId': cardTroveWorkspaceId,
-      'sharedFileId': fileId,
-    });
+    final metadata = SettableMetadata(
+      customMetadata: {
+        'originalName': file.name,
+        'workspaceId': cardTroveWorkspaceId,
+        'sharedFileId': fileId,
+      },
+    );
 
     if (file.bytes != null) {
       await ref.putData(file.bytes!, metadata);
@@ -123,18 +125,15 @@ class FilesService {
     final idToken = await FirebaseAuth.instance.currentUser?.getIdToken();
     if (idToken == null) throw StateError('Not signed in.');
 
-    final bytes = file.bytes ??
+    final bytes =
+        file.bytes ??
         (file.path == null ? null : await File(file.path!).readAsBytes());
     if (bytes == null) throw StateError('Could not read ${file.name}.');
 
-    final uri = Uri.https(
-      'firebasestorage.googleapis.com',
-      '/v0/b/$bucket/o',
-      {
-        'uploadType': 'media',
-        'name': storagePath,
-      },
-    );
+    final uri = Uri.https('firebasestorage.googleapis.com', '/v0/b/$bucket/o', {
+      'uploadType': 'media',
+      'name': storagePath,
+    });
 
     final response = await http.post(
       uri,

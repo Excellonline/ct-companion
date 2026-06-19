@@ -62,14 +62,20 @@ void main() {
     await tester.enterText(_textFieldWithLabel('Password'), password);
     await tester.tap(find.widgetWithText(FilledButton, 'Create account'));
 
-    await _waitFor(tester, find.text('Notes'),
-        timeout: const Duration(seconds: 45));
+    await _waitFor(
+      tester,
+      find.text('Notes'),
+      timeout: const Duration(seconds: 45),
+    );
     _expectNoFlutterException(tester);
 
     await _openTab(tester, 'Notes');
     await _createNote(tester, noteTitle, noteBody);
-    await _waitFor(tester, find.text(noteTitle),
-        timeout: const Duration(seconds: 30));
+    await _waitFor(
+      tester,
+      find.text(noteTitle),
+      timeout: const Duration(seconds: 30),
+    );
     _expectNoFlutterException(tester);
 
     await tester.enterText(_textFieldWithHint('Search notes'), noteTitle);
@@ -80,8 +86,11 @@ void main() {
     await _openTab(tester, 'To-Do');
     await tester.enterText(_textFieldWithHint('Add a task'), taskText);
     await tester.testTextInput.receiveAction(TextInputAction.done);
-    await _waitFor(tester, find.text(taskText),
-        timeout: const Duration(seconds: 30));
+    await _waitFor(
+      tester,
+      find.text(taskText),
+      timeout: const Duration(seconds: 30),
+    );
     _expectNoFlutterException(tester);
 
     await _openTab(tester, 'Chat');
@@ -89,13 +98,19 @@ void main() {
     await _waitFor(tester, find.text('New chat topic'));
     await tester.enterText(_textFieldWithHint('Topic name'), chatTopic);
     await tester.tap(find.widgetWithText(FilledButton, 'Create'));
-    await _waitFor(tester, find.text(chatTopic),
-        timeout: const Duration(seconds: 30));
+    await _waitFor(
+      tester,
+      find.text(chatTopic),
+      timeout: const Duration(seconds: 30),
+    );
 
     await tester.enterText(_textFieldWithHint('Message the team'), chatMessage);
     await tester.testTextInput.receiveAction(TextInputAction.send);
-    await _waitFor(tester, find.text(chatMessage),
-        timeout: const Duration(seconds: 30));
+    await _waitFor(
+      tester,
+      find.text(chatMessage),
+      timeout: const Duration(seconds: 30),
+    );
     _expectNoFlutterException(tester);
 
     await _openTab(tester, 'Files');
@@ -109,8 +124,11 @@ void main() {
     await tester.tap(find.text('Sign out').last);
     await _waitFor(tester, find.text('Sign out?'));
     await tester.tap(find.widgetWithText(FilledButton, 'Sign out'));
-    await _waitFor(tester, find.text('Sign in'),
-        timeout: const Duration(seconds: 20));
+    await _waitFor(
+      tester,
+      find.text('Sign in'),
+      timeout: const Duration(seconds: 20),
+    );
     _expectNoFlutterException(tester);
   });
 }
@@ -135,30 +153,29 @@ Future<void> _openTab(WidgetTester tester, String label) async {
   await tester.pump(const Duration(seconds: 1));
 }
 
-Future<void> _createNote(
-  WidgetTester tester,
-  String title,
-  String body,
-) async {
+Future<void> _createNote(WidgetTester tester, String title, String body) async {
   await _waitFor(tester, find.byTooltip('New note (Ctrl+N)'));
   await tester.tap(find.byTooltip('New note (Ctrl+N)'));
   await _waitFor(tester, find.text('New'));
   await tester.enterText(_textFieldWithHint('Title'), title);
   await tester.enterText(_textFieldWithHint('Write something...'), body);
   await tester.tap(find.widgetWithText(FilledButton, 'Save'));
-  await _waitFor(tester, _textFieldWithHint('Search notes'),
-      timeout: const Duration(seconds: 45));
+  await _waitFor(
+    tester,
+    _textFieldWithHint('Search notes'),
+    timeout: const Duration(seconds: 45),
+  );
 }
 
 Finder _textFieldWithHint(String hint) => find.byWidgetPredicate(
-      (widget) => widget is TextField && widget.decoration?.hintText == hint,
-      description: 'TextField with hint "$hint"',
-    );
+  (widget) => widget is TextField && widget.decoration?.hintText == hint,
+  description: 'TextField with hint "$hint"',
+);
 
 Finder _textFieldWithLabel(String label) => find.byWidgetPredicate(
-      (widget) => widget is TextField && widget.decoration?.labelText == label,
-      description: 'TextField with label "$label"',
-    );
+  (widget) => widget is TextField && widget.decoration?.labelText == label,
+  description: 'TextField with label "$label"',
+);
 
 Future<void> _waitFor(
   WidgetTester tester,

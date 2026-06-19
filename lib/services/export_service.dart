@@ -61,8 +61,8 @@ class ExportService {
   }
 
   Map<String, dynamic> _cleanMap(Map<String, dynamic> map) => {
-        for (final entry in map.entries) entry.key: _cleanValue(entry.value),
-      };
+    for (final entry in map.entries) entry.key: _cleanValue(entry.value),
+  };
 
   Object? _cleanValue(Object? value) {
     if (value is Timestamp) return value.toDate().toIso8601String();
